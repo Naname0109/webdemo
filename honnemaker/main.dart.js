@@ -93054,7 +93054,7 @@ if(this.c.n(0,a)){this.a.a=!0
 return!1}return!0},
 $S:551}
 A.Pe.prototype={
-mc(a,b){return new A.uQ(b.kL($.aVt(),t.aq),"\u30db\u30f3\u30cd\u30e1\u30fc\u30ab\u30fc",A.aL8(),A.aL8(),B.a9L,B.W0,B.Oj,null)}}
+mc(a,b){return new A.uQ(b.kL($.aVt(),t.aq),"\u30bd\u30d5\u30c8\u30fc\u30af",A.aL8(),A.aL8(),B.a9L,B.W0,B.Oj,null)}}
 A.v3.prototype={
 L(){return"NoteType."+this.b}}
 A.pA.prototype={
@@ -93325,7 +93325,7 @@ jU(a){return new A.bX(A.b7f(a),t.kL)},
 pC(a){return B.b.n(A.b(["en","ja"],t.s),a.gdR())},
 on(a){return!1}}
 A.KR.prototype={
-gHX(){return"Honne Maker"},
+gHX(){return"SofTalk"},
 ga0A(){return"Convert"},
 gLv(){return"History"},
 gLw(){return"Settings"},
@@ -93379,7 +93379,7 @@ gY5(){return"\u3082\u3046\u50ac\u4fc3\u3059\u308b\u306e3\u56de\u76ee\u306a\u3093
 gY6(){return"\u305d\u308c\u306f\u9055\u3046\u3068\u601d\u3046\u3002\u52dd\u624b\u306b\u6c7a\u3081\u308b\u306a"},
 gY7(){return"\u6bce\u56de\u9045\u3044\u3002\u30de\u30b8\u3067\u3057\u3093\u3069\u3044"}}
 A.KS.prototype={
-gHX(){return"\u30db\u30f3\u30cd\u30e1\u30fc\u30ab\u30fc"},
+gHX(){return"\u30bd\u30d5\u30c8\u30fc\u30af"},
 ga0A(){return"\u5909\u63db"},
 gLv(){return"\u5c65\u6b74"},
 gLw(){return"\u8a2d\u5b9a"},
