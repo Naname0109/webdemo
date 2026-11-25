@@ -62,7 +62,8 @@
   #shk.shake{animation:shake .38s linear}
   @keyframes shake{0%,100%{transform:none}15%{transform:translate(-14px,6px)}35%{transform:translate(12px,-8px)}55%{transform:translate(-8px,4px)}75%{transform:translate(5px,-2px)}}
   #stage{position:absolute;left:0;top:0;width:716px}
-  .rk,.gh{position:absolute;bottom:178px;height:312px;transform-origin:50% 100%;pointer-events:none;user-select:none;-webkit-user-drag:none}
+  /* v8 の絵（art_v8・360 角・足もとは下から 14%）: 足もとを土俵の面にそろえ、傾きの軸も足もと */
+  .rk,.gh{position:absolute;bottom:116px;height:440px;transform-origin:50% 86%;pointer-events:none;user-select:none;-webkit-user-drag:none}
   .rk{transition:left var(--mv,.3s) cubic-bezier(.3,.8,.3,1),transform .22s ease-out;z-index:2}
   .gh{opacity:.3;filter:grayscale(1) contrast(.8);display:none;z-index:1}
   .tag{position:absolute;bottom:500px;font-family:var(--mincho);font-weight:800;font-size:34px;line-height:1;white-space:nowrap;transition:left var(--mv,.3s) cubic-bezier(.3,.8,.3,1);z-index:3}
@@ -145,6 +146,39 @@
   .card.sel .ap{color:var(--paper2)}
   .card:active,.card.pressed{transform:translateY(3px);border-bottom-width:2px}
   .card:disabled{opacity:.4;cursor:default;border-bottom-width:2px}
+  /* v10: 禁じ手の札は墨地に朱の字・秘術の札は墨地に金の字（角に見つかる率／気の粒） */
+  .card.kin,.card.hi{background:var(--ink);border-color:var(--ink);border-bottom-color:#000}
+  .card.kin .ct{color:#e0574e}
+  .card.hi .ct{color:#d8b25a}
+  .card.kin .pp i,.card.hi .pp i{background:var(--paper2)}
+  .card.hi .pp b{width:10px;height:10px;background:#d8b25a;transform:rotate(45deg);margin-left:4px}
+  .card.kin .ap,.card.hi .ap{color:var(--paper2)}
+  .card.kin .why,.card.hi .why{color:var(--paper2)}
+  .card .fo{position:absolute;left:6px;top:4px;font-family:var(--mincho);font-weight:800;font-size:13px;line-height:1;color:#e0574e}
+  .card.kin.sel,.card.hi.sel{background:#3a3430;outline:3px solid var(--shu);outline-offset:-7px}
+  .card.hi.sel{outline-color:#a07b24}
+  @media (hover:hover) and (pointer:fine){.card.kin:hover:not(:disabled):not(.sel),.card.hi:hover:not(:disabled):not(.sel){background:#2c2824}}
+  /* 気（上の帯・体力の下の金の粒）・相手の印（禁じ手＝朱の「荒」・秘術＝金の「異」） */
+  .kib{display:flex;gap:4px;height:9px;margin-top:4px}
+  .kib:empty{display:none}
+  .kib i{width:8px;height:8px;margin:0 1px;transform:rotate(45deg);border:1.5px solid #a07b24}
+  .kib i.on{background:#a07b24}
+  .spm{font-style:normal;display:inline-block;margin-right:8px;font-family:var(--mincho);font-weight:800;font-size:22px;line-height:1;padding:3px 5px 2px;color:var(--paper);vertical-align:3px}
+  .spm.kin{background:var(--shu)} .spm.hi{background:#a07b24}
+  .tag i.spm{margin-left:0;border:0}
+  .spm:empty,.tag i.spm:empty{display:none}
+  .intent .rd.fo{background:var(--shu)} .intent .rd.ps{background:#a07b24}
+  /* 物言い（1 か所・1 秒）: 行司の軍配がひっくり返る */
+  .mono{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:9;display:flex;align-items:center;gap:18px;padding:14px 30px 14px 22px;background:rgba(227,223,214,.94);border-top:5px solid var(--ink);border-bottom:5px solid var(--ink);pointer-events:none;white-space:nowrap;animation:monout 1.1s linear forwards}
+  .mono b{font-family:var(--mincho);font-weight:800;font-size:104px;line-height:1;color:var(--ink);letter-spacing:.02em}
+  .mono svg{flex:none;width:130px;height:130px;animation:gunbai .55s cubic-bezier(.5,0,.3,1.4) .15s both}
+  @keyframes monout{0%,88%{opacity:1}100%{opacity:0}}
+  @keyframes gunbai{from{transform:rotate(-60deg)}to{transform:rotate(60deg) scaleX(-1)}}
+  /* 秘術: 土俵の色が一瞬変わる（字は出さない） */
+  .psyfx{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle at var(--px,40%) 70%,rgba(160,123,36,.55),rgba(47,79,115,.35) 45%,rgba(29,26,23,0) 75%);mix-blend-mode:multiply;animation:psy .7s ease-out forwards}
+  @keyframes psy{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+  .kim.sk .kn{color:#e0574e;background:var(--ink);border-color:var(--shu)}
+  .kim.sh .kn{color:#d8b25a;background:var(--ink);border-color:#a07b24}
   .pass{grid-column:1/-1;border:2px dashed var(--ink);background:transparent;font-family:var(--mincho);font-size:19px;font-weight:800;cursor:pointer}
   .ff{grid-column:1/-1;display:grid;place-items:center;font-family:var(--mincho);font-weight:800;font-size:20px;color:var(--ink2)}
   .info{position:absolute;left:14px;right:14px;top:-8px;transform:translateY(-100%);background:var(--ink);color:var(--paper);padding:8px 12px;font-size:14px;line-height:1.45;display:none;z-index:5}
@@ -213,6 +247,18 @@
   .hard .risk{margin-left:auto;font-weight:800;font-size:14px;color:#fff;background:var(--shu);padding:3px 8px}
   .hard.on{background:var(--ink);color:var(--paper)} .hard.on small{color:var(--paper2)}
   .hard:disabled{opacity:.4;cursor:default}
+  /* v10: まれな晩の 1 本（墨地。裏稽古＝朱の角判「裏」・山ごもり＝金の角判「山」） */
+  .spk{margin-top:8px;width:100%;min-height:48px;display:flex;align-items:center;gap:10px;border:2px solid var(--ink);border-bottom:5px solid #000;background:var(--ink);color:var(--paper);padding:6px 12px;text-align:left;cursor:pointer;transition:transform .1s,border-bottom-width .1s}
+  .spk:active:not(:disabled),.spk.pressed{transform:translateY(3px);border-bottom-width:2px}
+  .spk:disabled{opacity:.4;cursor:default}
+  .spk .sm{font-family:var(--mincho);font-weight:800;font-size:13px;line-height:1;color:#fff;background:var(--shu);padding:4px 4px 3px;transform:rotate(-6deg)}
+  .spk.yama .sm{background:#a07b24}
+  .spk b{font-family:var(--mincho);font-weight:800;font-size:19px;color:#e0574e;white-space:nowrap}
+  .spk.yama b{color:#d8b25a}
+  .spk small{font-size:12px;color:var(--paper2);white-space:nowrap}
+  .spk .rk2{margin-left:auto;display:flex;gap:3px;align-items:center;font-size:12px}
+  .spk .rk2 i{width:8px;height:8px;background:var(--paper2)}
+  .spk .rk2 .rs{margin-left:4px;color:#e0574e;font-weight:700}
   .glist{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:10px}
   .glist:empty{display:none}
   .glist button{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 8px;text-align:center}
@@ -270,10 +316,16 @@
   .kgrid em{position:absolute;right:4px;top:4px;font-style:normal;font-family:var(--mincho);font-weight:800;font-size:11px;color:var(--shu)}
   .kgrid .cat{grid-column:1/4;min-height:0;padding:4px 6px 3px;font-family:var(--mincho);font-weight:800;font-size:13px;background:var(--ink);color:var(--paper);flex-direction:row}
   /* 帳の 2 枚（決まり手／教えと型）: 罫の下線で切り替える */
-  .tabs{display:grid;grid-template-columns:1fr 1fr;margin-top:8px;border-bottom:2px solid var(--ink)}
-  .tabs button{height:46px;border:0;background:transparent;font-family:var(--mincho);font-weight:800;font-size:17px;color:var(--ink2);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px;padding:0}
+  .tabs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8px;border-bottom:2px solid var(--ink)}
+  .tabs button{height:50px;border:0;background:transparent;font-family:var(--mincho);font-weight:800;font-size:14px;letter-spacing:-.04em;line-height:1.15;color:var(--ink2);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px;padding:0;white-space:nowrap}
   .tabs button.on{color:var(--ink);border-bottom-color:var(--shu)}
-  .tabs button small{font-family:var(--gothic);font-size:12px;font-weight:500;margin-left:6px}
+  .tabs button small{display:block;font-family:var(--gothic);font-size:11px;font-weight:500;letter-spacing:0}
+  /* v10: 帳の 4 枚目（禁じ手＝朱・秘術＝金の見出し） */
+  .kgrid .cat.ck{background:var(--shu)} .kgrid .cat.ch{background:#a07b24}
+  .kgrid .got.sk b{color:var(--shu)} .kgrid .got.sh b{color:#7d5f17}
+  .sphd{display:flex;gap:18px;align-items:baseline;margin-top:10px;font-size:12px;color:var(--ink2)}
+  .sphd b{font-family:var(--mincho);font-weight:800;font-size:20px;color:var(--ink);margin-left:4px}
+  .sphd b.bad{color:var(--shu)}
   .v7 h4{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:16px 0 0;padding-bottom:4px;border-bottom:1px solid var(--ink);font-family:var(--mincho);font-weight:800;font-size:16px}
   .v7 h4 small{font-family:var(--gothic);font-weight:500;font-size:11px;color:var(--ink2);text-align:right}
   .v7 .row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;min-height:48px;padding:7px 0;border-bottom:1px dotted var(--ink3)}
@@ -298,6 +350,108 @@
   .heya li::before{content:"錠";font-family:var(--mincho);font-size:12px;font-weight:800;width:18px;height:18px;flex:none;display:grid;place-items:center;border:1px solid var(--ink2)}
   .heya ul{margin:0;padding:0}
   .disc{margin-top:10px;font-size:12px;color:var(--ink3)}
+  /* v8: 格（稽古の紙の右上の 1 語・千秋楽の紙の右上の判と点） */
+  .kk{margin-left:12px;font-size:12px;color:var(--ink2);white-space:nowrap}
+  .kk b{font-family:var(--mincho);font-weight:800;font-size:17px;color:var(--ink);margin-left:4px}
+  .sh-h .kk2{margin-left:auto;display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--ink2);white-space:nowrap}
+  .kk2 b{font-family:var(--mincho);font-weight:800;font-size:20px;color:var(--ink);padding:1px 7px 2px;border:2px solid var(--ink);line-height:1.1}
+  .kk2 span{font-family:var(--mincho);font-weight:800;font-size:17px;color:var(--ink)}
+  .kk2.pop b{color:var(--shu);border-color:var(--shu);animation:kkpop .45s cubic-bezier(.2,1.6,.4,1)}
+  .kk2.pop span{color:var(--shu)}
+  @keyframes kkpop{from{transform:scale(1.9) rotate(-8deg)}to{transform:none}}
+  .jl{margin-top:8px;font-size:13px;color:var(--ink2);line-height:1.5}
+  .jl b{font-family:var(--mincho);font-weight:800;font-size:16px;color:var(--shu)}
+  /* 引退の紙: 格の大きな判・格の段・生涯の星（番付の 1 字と勝ち星） */
+  .kbig{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-top:10px;padding:10px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .kst{font-family:var(--mincho);font-weight:800;font-size:54px;line-height:1;color:var(--shu);border:5px double var(--shu);padding:8px 12px 10px;transform:rotate(-4deg);white-space:nowrap;animation:kimin .6s cubic-bezier(.2,1.4,.4,1) both}
+  .kbig .num{font-family:var(--mincho);font-weight:800;font-size:40px;line-height:1}
+  .kbig small{font-size:13px;margin-left:4px;color:var(--ink2)}
+  .klad{display:flex;gap:3px;margin-top:8px}
+  .klad i{font-style:normal;flex:1;font-family:var(--mincho);font-weight:800;font-size:11px;padding:3px 0 3px 4px;border:1px solid var(--ink3);color:var(--ink3);white-space:nowrap;letter-spacing:-.08em}
+  .klad i.past{border-color:var(--ink);color:var(--ink)}
+  .klad i.on{background:var(--shu);border-color:var(--shu);color:#fff}
+  .life{display:grid;grid-template-columns:repeat(12,1fr);margin-top:10px;padding-left:1px}
+  .life div{border:1px solid var(--ink);margin-left:-1px;padding:3px 0 2px 6px}
+  .life b{display:block;font-family:var(--mincho);font-weight:800;font-size:13px;line-height:1.2;color:var(--ink2)}
+  .life span{display:block;font-family:var(--mincho);font-weight:800;font-size:17px;line-height:1.1}
+  .life .kk span{color:var(--ink)}
+  .life div:not(.kk) span{color:var(--ink3)}
+  .life .oz b{color:var(--shu)}
+  /* 名鑑の札（番付の紙の 1 枚） */
+  .rc{padding-bottom:4px}
+  .rc-h{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding-bottom:8px;border-bottom:3px double var(--ink)}
+  .rc-k{text-align:right}
+  .rc-k b{display:block;font-family:var(--mincho);font-weight:800;font-size:26px;line-height:1;color:var(--shu);border:3px solid var(--shu);padding:5px 8px 6px;white-space:nowrap}
+  .rc-k span{display:block;margin-top:4px;font-family:var(--mincho);font-weight:800;font-size:16px}
+  .rc .abm{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 10px;margin-top:10px;font-family:var(--mincho);font-weight:800;font-size:14px}
+  .rc .abm i{font-style:normal;display:flex;gap:2px;align-items:center}
+  .abm u{display:inline-block;width:8px;height:8px;border:1.2px solid var(--ink);border-radius:50%}
+  .abm u.on{background:var(--ink)}
+  .rc-d{display:grid;grid-template-columns:auto 1fr;margin:8px 0 0}
+  .rc-d dt,.rc-d dd{margin:0;padding:6px 0;border-bottom:1px dotted var(--ink3);font-size:13px}
+  .rc-d dt{color:var(--ink2);padding-right:14px}
+  .rc-d dd{font-family:var(--mincho);font-weight:800;font-size:15px}
+  .kbig + .jl,.life + .abm{margin-top:10px}
+  #sheet > .abm{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 10px;margin-top:10px;font-family:var(--mincho);font-weight:800;font-size:14px}
+  #sheet > .abm i{font-style:normal;display:flex;gap:2px;align-items:center}
+  #sheet > .abm span,.rc .abm span{white-space:nowrap}
+  .kbig .kcap{display:block;font-size:12px;color:var(--ink2);margin-bottom:2px}
+  .mk h4{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 0;padding-bottom:4px;border-bottom:1px solid var(--ink);font-family:var(--mincho);font-weight:800;font-size:15px}
+  .mk h4 small{font-family:var(--gothic);font-weight:500;font-size:12px;color:var(--ink2)}
+  .mrow{width:100%;min-height:52px;display:grid;grid-template-columns:1fr auto auto;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;border:0;border-bottom:1px dotted var(--ink3);background:transparent;padding:6px 0;cursor:pointer;color:var(--ink)}
+  .mrow b{font-family:var(--mincho);font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .mrow span{grid-row:2;font-size:12px;color:var(--ink2)}
+  .mrow em{grid-row:1/3;grid-column:2;font-style:normal;font-family:var(--mincho);font-weight:800;font-size:16px;color:var(--shu);border:2px solid var(--shu);padding:2px 6px 3px;white-space:nowrap}
+  .mrow i{grid-row:1/3;grid-column:3;font-style:normal;font-family:var(--mincho);font-weight:800;font-size:18px;min-width:36px;text-align:right}
+  .mrow:active{background:var(--paper2)}
+  .mno{padding:12px 0;font-size:13px;color:var(--ink2)}
+  /* 四股名: 番付表の名前の札のように縦に 3 つ */
+  .nmo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+  .nmo button{height:150px;border:2px solid var(--ink);border-bottom-width:5px;background:#efe9dc;color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:6px 0}
+  .nmo button b{writing-mode:vertical-rl;font-family:var(--mincho);font-weight:800;font-size:30px;letter-spacing:.08em;line-height:1}
+  .nmo button.om{border-style:dashed;background:transparent}
+  .nmo button.om b{font-size:20px;color:var(--ink2)}
+  .nmo button:active{transform:translateY(3px);border-bottom-width:2px}
+  .nmg{margin-top:12px;font-family:var(--mincho);font-weight:800;font-size:16px;line-height:1.6}
+
+  /* v9: 入口（番付表の 2 つの欄: 今日の場所／生涯）。角は立てる・左寄せ */
+  .gt-t{font-family:var(--mincho);font-weight:800;font-size:30px;line-height:1.15;letter-spacing:-.03em;margin:0}
+  .gt-s{margin-top:6px;font-size:14px;color:var(--ink2);line-height:1.5}
+  .gate{display:block;width:100%;margin-top:14px;border:2px solid var(--ink);border-bottom-width:6px;background:#efe9dc;color:var(--ink);cursor:pointer;text-align:left;padding:12px 14px 12px;position:relative;transition:transform .1s,border-bottom-width .1s}
+  .gate:active,.gate.pressed{transform:translateY(3px);border-bottom-width:3px}
+  .gate.main{background:var(--ink);color:var(--paper);border-color:var(--ink);border-bottom-color:var(--shu)}
+  .gate .gk{display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--ink2)}
+  .gate.main .gk{color:var(--paper2)}
+  .gate .gk em{font-style:normal;margin-left:auto;font-family:var(--mincho);font-weight:800;font-size:15px;color:var(--shu)}
+  .gate.main .gk em{color:#e0a19c}
+  .gate b{display:block;margin-top:4px;font-family:var(--mincho);font-weight:800;font-size:26px;line-height:1.15;letter-spacing:-.03em}
+  .gate small{display:block;margin-top:4px;font-size:13px;color:var(--ink2)}
+  .gate.main small{color:var(--paper2)}
+  .gate.done{cursor:default;background:transparent;border-style:dashed;border-bottom-width:2px}
+  .gate.done:active{transform:none}
+  .gate .glet{position:absolute;right:12px;bottom:10px;font-family:var(--mincho);font-weight:800;font-size:40px;line-height:1;color:var(--shu)}
+  #app.atgate .tag,#app.atgate .intent,#app.atgate .bar > *:not(.snd){visibility:hidden}
+  .grec{margin-top:14px;padding-top:8px;border-top:1px solid var(--ink);font-size:13px;color:var(--ink2);line-height:1.6}
+  .grec b{font-family:var(--mincho);font-weight:800;font-size:16px;color:var(--ink);margin:0 4px}
+  /* v9: 化粧廻しの柄（帯）・新記録・次の目標 */
+  .ksb{display:block;width:100%;height:20px;margin-top:8px}
+  .ksb.sm{width:64px;height:18px;margin:0;flex:none}
+  .kenew{display:flex;align-items:center;gap:10px;margin-top:10px;font-family:var(--mincho);font-weight:800;font-size:15px;color:var(--shu)}
+  .kenew .ksb{width:72px;height:20px;margin:0;flex:none;animation:kkpop .45s cubic-bezier(.2,1.6,.4,1)}
+  .newrec{display:inline-block;margin-left:10px;font-family:var(--mincho);font-weight:800;font-size:18px;color:var(--paper);background:var(--shu);padding:3px 8px 4px;transform:rotate(-4deg);vertical-align:6px}
+  .nextg{margin-top:10px;padding:7px 0;border-top:1px dashed var(--ink2);border-bottom:1px dashed var(--ink2);font-size:13px;color:var(--ink2)}
+  .nextg b{display:block;margin-top:2px;font-family:var(--mincho);font-weight:800;font-size:16px;line-height:1.4;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+  .ptl{margin-top:6px;font-size:12px;color:var(--ink2)}
+  .ptl b{font-family:var(--mincho);font-weight:800;font-size:14px;color:var(--ink);margin:0 6px 0 2px}
+  .ke-row{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;border:0;border-bottom:1px dotted var(--ink3);background:transparent;padding:6px 0;cursor:pointer;text-align:left;color:var(--ink)}
+  .ke-row b{font-family:var(--mincho);font-weight:800;font-size:17px;min-width:2.4em}
+  .ke-row span{font-size:12px;color:var(--ink2)}
+  .ke-row i{margin-left:auto;font-style:normal;font-family:var(--mincho);font-weight:800;font-size:13px;color:var(--shu)}
+  .ke-row.no{cursor:default}
+  .ke-row.no b{color:var(--ink3)}
+  .ke-row.no .ksb{opacity:.18}
+  .ke-row.on{background:var(--paper2)}
+
   /* 製品版で遊びたい（押したら 1 行に替わる） */
   .want{margin-top:8px;width:100%;height:48px;border:2px solid var(--shu);border-radius:3px;border-bottom-width:5px;background:var(--paper);color:var(--shu);font-family:var(--mincho);font-size:18px;font-weight:800;cursor:pointer;transition:transform .1s,border-bottom-width .1s}
   .sent{margin-top:8px;height:48px;display:flex;align-items:center;font-family:var(--mincho);font-size:17px;font-weight:800;color:var(--shu)}
@@ -328,6 +482,8 @@
   button:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
   @media (hover:hover) and (pointer:fine){.card:hover:not(:disabled):not(.sel){background:#f5efe2}}
   button{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:inherit}
+  .quit{margin-top:10px;width:100%;color:var(--ink-2,#6b5a50)}
+  .quit.armed{color:#b0302a;border-color:#b0302a}
 </style>
 </head>
 <body>
@@ -335,7 +491,7 @@
   <header class="bar">
     <div class="day num"><b id="dayN">1</b><small>日目</small></div>
     <div class="hs"><div class="dots" id="dots"></div><div class="cap" id="cap"></div></div>
-    <div class="st" id="st"><div class="stl"><span>体力</span><b class="num" id="stam">12</b></div><div class="sbar" id="sbar"></div></div>
+    <div class="st" id="st"><div class="stl"><span>体力</span><b class="num" id="stam">12</b></div><div class="sbar" id="sbar"></div><div class="kib" id="kib" aria-label="気"></div></div>
     <button class="bookbtn" id="bookBtn" aria-label="決まり手帳">帳</button>
     <button class="snd" id="sndBtn" aria-label="音"></button>
   </header>
@@ -344,8 +500,8 @@
     <canvas id="stage" width="716" height="800"></canvas>
     <img class="gh" id="gp0" alt=""><img class="gh" id="go0" alt=""><img class="gh" id="gp1" alt=""><img class="gh" id="go1" alt="">
     <img class="rk" id="rp" alt=""><img class="rk" id="ro" alt="">
-    <div class="tag" id="tagP">潮ノ花<small id="rank"></small></div>
-    <div class="tag" id="tagO"><svg class="kt" id="oppKata" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg><span id="oppName"></span><i id="oppTier"></i></div>
+    <div class="tag" id="tagP"><span id="myName">潮ノ花</span><small id="rank"></small></div>
+    <div class="tag" id="tagO"><svg class="kt" id="oppKata" viewBox="0 0 24 24" aria-hidden="true"><path d=""/></svg><i class="spm" id="oppSp"></i><span id="oppName"></span><i id="oppTier"></i></div>
     <div class="intent hide" id="intent"></div>
     <div class="bub" id="bub"></div>
     <div id="fx"></div>
@@ -370,6 +526,7 @@
   // ---------- 乱数 ----------
   function mulberry(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   let rnd = mulberry(DEMO ? 7 : (Date.now() & 0xffffff));
+  const RND0 = rnd;                               // v9: 生涯はこの乱数。今日の場所の番は日付の種の乱数に差し替える
   const pickW = (w, r) => { let s = 0; for (const k in w) s += Math.max(0, w[k]); let x = r() * s; for (const k in w){ x -= Math.max(0, w[k]); if (x < 0) return k; } return Object.keys(w)[0]; };
   const shuffle = (a, r) => { for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -405,12 +562,13 @@
     yotsu:{t:'四つ',     beat:'waza',  ab:'yotsu', ic:'M3 8.5h18v5.5H3zM9.5 8.5v5.5M14.5 8.5v5.5M9.5 14l-2.5 7M14.5 14l2.5 7M12 14v7'},
     waza: {t:'業師',     beat:'oshi',  ab:'kan',   ic:'M12.5 12.5a1.5 1.5 0 11-1.5-1.5 3 3 0 013 3 4.5 4.5 0 01-4.5 4.5A6 6 0 013.5 12.5 7.5 7.5 0 0111 5a9 9 0 019 9'},
   };
-  const SIZE = [{t:'小', s:.88}, {t:'', s:1}, {t:'大', s:1.05}];   // 相手の体格（絵の大きさ）
+  const SIZE = [{t:'小', s:.97}, {t:'', s:1}, {t:'大', s:1.03}];   // 相手の体格（v8: 体格は絵に入っているので、拡大縮小は弱く）
   const SIZE_P = [.4, .2];                                          // 小 40%・ふつう 20%・大 40%
 
   // 適性: 使う能力 − 要る能力 の平均（覚える技は +1 から始まる＝覚えた時点で B）が 2 以上で A、1 以上で B、それ未満で C
   const APT = [{t:'C', p:60}, {t:'B', p:80}, {t:'A', p:95}];
   const RATE_AFF = 25, RATE_SIZE = 15, RATE_DEF = 5, RATE_MIN = 30, RATE_MAX = 99;
+  const GRIP_RATE = 8;                                  // v8: 組みつきは決まりやすく（組み技を出やすく）
   const DEF_OF = {oshi:'atari', yotsu:'yotsu', waza:'kan'};   // 相手の同じ取り口の能力が 3 以上だと、こちらの決まる率が 1 段につき −5%
 
   // 技: t ボタンの字（普通の言葉）・s 相撲の名前（長押し）・cost 体力・use いつ（sep 離れて/grip 組んで/both）
@@ -432,13 +590,37 @@
     kake:   {t:'足を掛ける',   s:'外掛け',     cost:2, use:'grip', kata:'yotsu', ab:['yotsu','kan'], req:{yotsu:2, kan:2}, big:1},
     tsuri:  {t:'吊る',         s:'吊り出し',   cost:3, use:'grip', kata:'yotsu', ab:['yotsu','koshi'], req:{yotsu:4, koshi:3}, big:-1},
     uchari: {t:'返す',         s:'うっちゃり', cost:2, use:'grip', kata:null,    ab:['koshi'], req:{koshi:3}},
+    // v10: 本物の技の外（REWORK_v10.md・名前と数字は Claude の提案）。sp:'kin' 禁じ手＝見つかると反則負け（foul 見つかる率の土台）／sp:'hi' 秘術＝気を使う
+    mage:   {t:'髷つかみ',     s:'髷つかみ（本来は反則）', cost:1, use:'both', kata:null, ab:['yotsu'], sp:'kin', foul:22},
+    lariat: {t:'ラリアット',   s:'ラリアット（反則）',     cost:2, use:'sep',  kata:null, ab:['atari'], sp:'kin', foul:22},
+    tobi:   {t:'飛び蹴り',     s:'飛び蹴り（反則）',       cost:3, use:'sep',  kata:null, ab:['atari'], sp:'kin', foul:28},
+    oufuku: {t:'往復張り',     s:'張り倒しの往復（反則まがい）', cost:1, use:'sep', kata:null, ab:['atari'], sp:'kin', foul:16},
+    jogai:  {t:'場外乱闘',     s:'場外乱闘（反則）',       cost:2, use:'both', kata:null, ab:['koshi'], sp:'kin', foul:32, edge:'any'},
+    shime:  {t:'首絞め',       s:'首絞め（反則）',         cost:2, use:'grip', kata:null, ab:['yotsu'], sp:'kin', foul:24},
+    nen:    {t:'念力',         s:'念力（秘術）',           cost:2, use:'both', kata:null, ab:['kan'], sp:'hi', ki:1},
+    shun:   {t:'瞬身',         s:'瞬身（秘術）',           cost:2, use:'sep',  kata:null, ab:['kan'], sp:'hi', ki:1},
+    toki:   {t:'時止め',       s:'時止め（秘術）',         cost:2, use:'both', kata:null, ab:['kan'], sp:'hi', ki:2},
+    senri:  {t:'千里眼',       s:'千里眼（秘術）',         cost:1, use:'both', kata:null, ab:['kan'], sp:'hi', ki:1, look:true},
+    daichi: {t:'大地の気',     s:'大地の気（秘術）',       cost:2, use:'both', kata:null, ab:['koshi'], sp:'hi', ki:1, edge:'me'},
+    bunshin:{t:'分身',         s:'分身（秘術）',           cost:2, use:'sep',  kata:null, ab:['kan'], sp:'hi', ki:1},
   };
+  const KIN_C = Object.keys(CARDS).filter(c => CARDS[c].sp === 'kin'), HI_C = Object.keys(CARDS).filter(c => CARDS[c].sp === 'hi'), SP_C = KIN_C.concat(HI_C);
+  const isSp = c => !!(c && CARDS[c] && CARDS[c].sp);
+  // 品格（0〜100・見えるのは稽古の紙と名鑑の札だけ）: 禁じ手を使うたび −3、見つかれば さらに −5。禁じ手を使わなかった場所のあと +5。横綱には 60 以上
+  const HIN_START = 80, HIN_USE = 3, HIN_FOUND = 5, HIN_CLEAN = 5, HIN_YOKO = 60, HIN_PT = 1.2;
+  // 気（場所ごとに満ちる）: 山ごもりで初めて 3、その後 +1（最大 5）
+  const KI_FIRST = 3, KI_MAX = 5;
+  const URA_P = .28, YAMA_P = .22;                           // 稽古の晩に「裏稽古」「山ごもり」が出る率（どちらか 1 つ）
   // 長押しの札に出す 1 行（10 字前後）
   const TIP = {
     push:'組みに来たら押し返す', thrust:'踏ん張りを破る。かわされると下がる', grip:'組めば投げ技が使える', throw:'組んで寄られたら大きく返す',
     dodge:'突っ込みを流す', brace:'突っ込みを受け止める。体力+1', nodowa:'組みに来たら押し返す', hataki:'突っ込みを大きく返す',
     otoshi:'突っ込みを横へ落とす', ashi:'踏ん張りを崩す', shitate:'寄ってくる相手を下から', kote:'組みに来た腕を抱えて投げる',
     gabu:'組んで踏ん張りを寄る', kake:'寄りにも踏ん張りにも効く', tsuri:'踏ん張る相手を持ち上げる', uchari:'土俵際で大きく返す',
+    mage:'見つかると反則負け', lariat:'見つかると反則負け', tobi:'かわされると大きく下がる。見つかると反則負け', oufuku:'見つかりにくい。見つかると反則負け',
+    jogai:'土俵際で相手ごと外へ。見つかると反則負け', shime:'組んで締める。見つかると反則負け',
+    nen:'気を1使う。触れずに押し返す', shun:'気を1使う。必ずかわして回り込む', toki:'気を2使う。相手の手を1回止める', senri:'気を1使う。相手の本当の手が見える（手番は使わない）',
+    daichi:'気を1使う。土俵際で必ず残って押し返す', bunshin:'気を1使う。相手の手を空振りさせる',
   };
   const START_DECK = ['push','thrust','grip','throw','dodge','brace'];
   const LEARN = Object.keys(CARDS).filter(c => CARDS[c].req);
@@ -485,14 +667,33 @@
     kimedashi:     {c:4, n:'極め出し',     p:'腕を極めて外へ',     ab:'極',   r:2, h:'四つ5で、組みに来た相手を寄ると…'},
     waridashi:     {c:4, n:'割り出し',     p:'割って押し出した',   ab:'割',   r:3, h:'当たりと四つが4で、組んで踏ん張る相手を押すと…'},
   };
-  const KIM_IDS = Object.keys(KIMS);
+  const KIM_IDS = Object.keys(KIMS);                         // 本物の 24 手（帳 n/24・格の点・技の数の物差しはこれだけ）
+  // v10: 禁じ手と秘術の決まり手（創作・帳の 4 枚目）。sp: 'kin'／'hi'。本物の 82 手には入れない
+  const SP_KIMS = {
+    magenage:   {sp:'kin', n:'髷投げ',         p:'髷をつかんで投げた',   ab:'髷', r:1, h:'「髷つかみ」で…'},
+    lariat:     {sp:'kin', n:'ラリアット倒し', p:'腕で首を刈った',       ab:'ラ', r:1, h:'「ラリアット」で…'},
+    tobigeri:   {sp:'kin', n:'飛び蹴り出し',   p:'飛んで蹴り出した',     ab:'蹴', r:2, h:'「飛び蹴り」で…'},
+    haritaoshi: {sp:'kin', n:'張り倒し',       p:'往復で張って倒した',   ab:'張', r:1, h:'「往復張り」で…'},
+    jogaiso:    {sp:'kin', n:'場外葬',         p:'相手ごと外へ落ちた',   ab:'葬', r:2, h:'土俵際で「場外乱闘」…'},
+    shimeotoshi:{sp:'kin', n:'絞め落とし',     p:'組んで首を絞めた',     ab:'絞', r:2, h:'組んで「首絞め」…'},
+    nendo:      {sp:'hi',  n:'念動押し出し',   p:'触れずに押し出した',   ab:'念', r:1, h:'「念力」で…'},
+    shunshin:   {sp:'hi',  n:'瞬身落とし',     p:'消えて背後から落とした', ab:'瞬', r:2, h:'「瞬身」で…'},
+    tokiyori:   {sp:'hi',  n:'時止め寄り切り', p:'止まった相手を寄った', ab:'時', r:2, h:'「時止め」で…'},
+    senrigaeshi:{sp:'hi',  n:'千里眼返し',     p:'手を見抜いて返した',   ab:'眼', r:2, h:'「千里眼」のすぐ次の手で勝つと…'},
+    daichigaeshi:{sp:'hi', n:'大地返し',       p:'土俵際から押し返した', ab:'地', r:2, h:'土俵際で「大地の気」…'},
+    bunshinnage:{sp:'hi',  n:'分身投げ',       p:'空を切らせて投げた',   ab:'分', r:2, h:'「分身」で…'},
+  };
+  Object.assign(KIMS, SP_KIMS);
+  const SPK_IDS = Object.keys(SP_KIMS), KIM_ALL = KIM_IDS.concat(SPK_IDS);
+  const SPK_OF = {mage:'magenage', lariat:'lariat', tobi:'tobigeri', oufuku:'haritaoshi', jogai:'jogaiso', shime:'shimeotoshi',
+    nen:'nendo', shun:'shunshin', toki:'tokiyori', daichi:'daichigaeshi', bunshin:'bunshinnage'};
   const ATARI_C = AB_BONUS.atari.cards;
 
   // 相手: 段（格下・互角・格上）ごとの能力の土台。取り口の能力は +1。番付が小結より上なら全員 +1
   const OPP_AB = [2, 3, 4], OPP_AB_RAND = .5, OPP_SAVE_KOSHI = 5;
   const STYLE = {
-    oshi: {t:'押してくる人',       sep:{charge:5,   grab:1.5, dodge:1.5, brace:2}},
-    yotsu:{t:'組みたがる人',       sep:{charge:2,   grab:5,   dodge:1,   brace:2}},
+    oshi: {t:'押してくる人',       sep:{charge:5,   grab:2.5, dodge:1.5, brace:2}},   // v8: 組みに来る手を少し増やした（1.5→2.5）
+    yotsu:{t:'組みたがる人',       sep:{charge:2,   grab:7,   dodge:1,   brace:2}},   // v8: 組みに来る割合を上げた（5→7）
     waza: {t:'かわすのがうまい人', sep:{charge:2,   grab:1.5, dodge:4.5, brace:2}},
   };
 
@@ -527,6 +728,10 @@
     oni:   {t:'突き押しの鬼',   e:'押し・突きの体力−1（1番に1回）', h:'押し出しなどで15勝すると', got:S => kimSum(S, OSHI_KIM) >= 15},
     yori:  {t:'寄り身の怪力',   e:'組んで押す技の決まる率+10%',  h:'寄り切りなどで12勝すると', got:S => kimSum(S, YORI_KIM) >= 12},
     tana:  {t:'引き出し名人',   e:'70%未満の技の決まる率+10%',   h:'違う決まり手10種で勝つと', got:S => KIM_IDS.filter(k => S.car.kc[k]).length >= 10},
+    // v10: 悪役と異能（相撲らしい言葉で）
+    arakure:{t:'土俵の荒くれ',  e:'禁じ手が見つかる率−8%',       h:'禁じ手で5勝すると',         got:S => kimSum(S, SPK_IDS.filter(k => KIMS[k].sp === 'kin')) >= 5},
+    monoii: {t:'物言いの主',    e:'禁じ手の決まる率+10%',        h:'物言いを3回受けると',       got:S => (S.car.fl || 0) >= 3},
+    shintsu:{t:'神通力',        e:'気の上限+1',                  h:'秘術で5勝すると',           got:S => kimSum(S, SPK_IDS.filter(k => KIMS[k].sp === 'hi')) >= 5},
   };
   // 自分の型: 同じ 2 手の流れで 3 勝すると型（最大 2）。型の順に出すと、2 手目の決まる率 +25%・2 マス伸びる（設計 +15%・+1 から sim で上げた）。
   // 研究される: 型の順に出して勝った場所が 3 つになると、互角より上の相手がその型の 1 手目に合わせてくる（8 割で返しを選び、1 手目は −30%・型の上乗せは無し）
@@ -554,10 +759,12 @@
   function rateOf(card, A, o){
     const c = CARDS[card];
     if (card === 'brace') return 100;
-    let p = APT[aptOf(card, A)].p + affinity(card, o) * RATE_AFF;
+    if (c.sp === 'hi') return card === 'nen' ? 95 : 100;         // v10: 秘術は気を払えば決まる（念力だけ 95%）
+    let p = APT[aptOf(card, A)].p + affinity(card, o) * RATE_AFF + (card === 'grip' ? GRIP_RATE : 0);
     if (c.big) p += c.big * (o.size - 1) * RATE_SIZE;
     const def = DEF_OF[c.kata];
     if (def) p -= RATE_DEF * Math.max(0, o.ab[def] - 2);
+    p -= RANK_DEF[o.rk] || 0;                                   // v8: 上位の土俵ほど技が決まりにくい
     return Math.max(RATE_MIN, Math.min(RATE_MAX, p));
   }
   // 自分の取り口: 当たり・四つ・相撲勘のいちばん高いもの（並べば無し）
@@ -568,6 +775,7 @@
   // v7: その場の決まる率（型・研究・異名・癖を足す）と体力（教え・異名）
   function rateAt(card, S, B, o){
     if (card === 'brace') return 100;
+    if (CARDS[card].sp === 'hi') return rateOf(card, S.A, o);
     let p = rateOf(card, S.A, o);
     const k = B ? kataOf(S, B.last, card) : null;
     if (kataLive(k, o)) p += KATA_RATE;
@@ -577,8 +785,18 @@
     if (S.imei === 'tana' && p < 70) p += 10;
     if (S.kuse === 'henka' && B && B.ex === 0) p -= KUSE_HENKA;
     if (S.kuse && KUSE[S.kuse].cards && KUSE[S.kuse].cards.includes(card)) p -= KUSE_RATE;
+    if (S.imei === 'monoii' && CARDS[card].sp === 'kin') p += 10;
+    if (B && B.opsy && CARDS[card].sp !== 'hi') p -= OPSY_RATE;       // v10: 相手の秘術（念力）で技が重い
     return Math.max(RATE_MIN, Math.min(RATE_MAX, p));
   }
+  // v10: 禁じ手の見つかる率（%）: 札の土台＋番付（幕下・十両 −10・前頭 −4・三役 0・大関から +8＝下の土俵は目がゆるい）−相撲勘 1 段につき 4（隠すのがうまい）−荒くれ 8
+  //      ＋この場所で使った回数 × 7（目を付けられる）
+  const FOUL_EYE = 3;
+  function foulRate(card, S){
+    const c = CARDS[card]; if (!c || c.sp !== 'kin') return 0;
+    return Math.max(6, Math.min(80, c.foul + (S.rank >= 6 ? 8 : S.rank >= 4 ? 0 : S.rank <= 1 ? -10 : -4) - 4 * (S.A.kan - 1) - (S.imei === 'arakure' ? 8 : 0) + FOUL_EYE * (S.kinN || 0)));
+  }
+  const kiCap = S => Math.min(KI_MAX + 1, (S.kiMax || 0) + (S.imei === 'shintsu' && S.kiMax ? 1 : 0));
   function costOf(card, S, B){
     let c = CARDS[card].cost;
     if (card === 'grip' && S.oshie.includes('mawashi')) c++;
@@ -591,6 +809,9 @@
   // pre: この 1 手の前 {g 組んでいたか, c 位置, pdf 直前に相手がかわし損ねたか}
   function decideKim(card, m, pre, A){
     const P = ATARI_C.includes(card);
+    if (SPK_OF[card]) return SPK_OF[card];                        // v10: 禁じ手と秘術は専用の決まり手
+    if (pre.senri) return 'senrigaeshi';                           // 千里眼のすぐ次の手で勝った
+    if (pre.dai) return 'daichigaeshi';                            // 大地の気で土俵際に残った番を、そのまま勝った
     if (card === 'uchari' || (card === 'throw' && pre.c <= -3)) return 'utchari';
     if (pre.pdf && !pre.g && P) return 'okuridashi';
     if (card === 'ashi') return 'ashitori';
@@ -693,10 +914,21 @@
   }
 
   // ---------- 途中保存（v3: 教え・癖・異名・型・勝ち方の履歴が増えた。v2 は引き継ぐ（癖は付けない）・v1 は捨てる） ----------
-  const SAVE_KEY = 'hakkeyoi.save.v3', V2_KEY = 'hakkeyoi.save.v2', OLD_SAVES = ['hakkeyoi.save.v1'];
+  // v8: 保存 v4（生涯・四股名・優勝の線・場所の判定）。v3・v2 は引き継ぐ（生涯はその場所から数え始め、名前は潮ノ花）
+  // v9: 保存 v5（場所の判定に記録と化粧廻しの印が付いた・中身は v4 と同じ形なのでそのまま引き継ぐ）。今日の場所と記録は別の箱
+  // v10: 保存 v6（品格・気・この場所の禁じ手の回数・物言いの数）。v5 以前は引き継ぐ（品格 80・気なし）
+  const SAVE_KEY = 'hakkeyoi.save.v6', V5_KEY = 'hakkeyoi.save.v5', V4_KEY = 'hakkeyoi.save.v4', V3_KEY = 'hakkeyoi.save.v3', V2_KEY = 'hakkeyoi.save.v2', OLD_SAVES = ['hakkeyoi.save.v1'];
   const CAN_SAVE = !DEMO && !SIM;
-  const PHASES = ['bout','grow','moshi','end'];
-  function saveGame(){ if (CAN_SAVE){ safeStore.setItem(SAVE_KEY, JSON.stringify({v:3, S})); try { localStorage.removeItem(V2_KEY); } catch (e){} } }
+  const PHASES = ['bout','grow','moshi','end','retire'];
+  function saveGame(){
+    if (!CAN_SAVE || CHAL) return;
+    if (S.dly){ if (!S.dly.over) dailySave(S); return; }    // v9: 今日の場所は別の箱（生涯の保存を上書きしない）
+    safeStore.setItem(SAVE_KEY, JSON.stringify({v:6, S})); try { [V2_KEY, V3_KEY, V4_KEY, V5_KEY].forEach(k => localStorage.removeItem(k)); } catch (e){}
+  }
+  const intIn = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
+  const v8Ok = s => isObj(s.life) && ['bn','hi','yu','sa','mk','kado','yuRun','sc'].every(k => intIn(s.life[k], 0, 9999)) && intIn(s.life.drop, -1, 9)
+    && Array.isArray(s.life.hist) && s.life.hist.every(h => Array.isArray(h) && intIn(h[0], 0, 7) && intIn(h[1], 0, 15))
+    && (s.nm === null || nmOk(s.nm)) && typeof s.rid === 'string' && intIn(s.line, 12, 15) && intIn(s.hurtN, 0, 99) && (s.J === null || isObj(s.J));
   const abOk = A => A && typeof A === 'object' && AB_IDS.every(a => Number.isInteger(A[a]) && A[a] >= 1 && A[a] <= AB_MAX);
   const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
   const v7Ok = s => Array.isArray(s.oshie) && s.oshie.every(i => OSHIE[i]) && (s.kuse == null || KUSE[s.kuse]) && (s.imei == null || IMEI[s.imei])
@@ -710,10 +942,28 @@
     if (!CAN_SAVE) return null;
     OLD_SAVES.forEach(k => { try { localStorage.removeItem(k); } catch (e){} });
     try {
-      const d = JSON.parse(safeStore.getItem(SAVE_KEY) || safeStore.getItem(V2_KEY) || 'null');
-      const s = d && (d.v === 3 || d.v === 2) && d.S;
+      const d = JSON.parse(safeStore.getItem(SAVE_KEY) || safeStore.getItem(V5_KEY) || safeStore.getItem(V4_KEY) || safeStore.getItem(V3_KEY) || safeStore.getItem(V2_KEY) || 'null');
+      const s = d && [2, 3, 4, 5, 6].includes(d.v) && d.S;
       if (s && d.v === 2) v7Fill(s);
       if (s && !v7Ok(s)) throw new Error('v7');
+      if (s && d.v < 4){ s.life = newLife(intIn(s.rank, 0, 7) ? s.rank : 0); s.nm = [0, 0]; s.rid = Math.floor(Math.random() * 1e9).toString(36); s.line = 13; s.hurtN = 0; s.J = null; }
+      if (s && !v8Ok(s)) throw new Error('v8');
+      if (s && checkS(s) && !s.dly) return s;
+    } catch (e){}
+    try { if ([SAVE_KEY, V5_KEY, V4_KEY, V3_KEY, V2_KEY].some(k => safeStore.getItem(k))){ [SAVE_KEY, V5_KEY, V4_KEY, V3_KEY, V2_KEY].forEach(k => localStorage.removeItem(k)); } } catch (e){}   // 壊れた保存は捨てて最初から
+    return null;
+  }
+  // 保存の中身の確かめ（生涯と今日の場所で共通）。通れば数を丸めて true
+  function checkS(s){
+    try {
+      if (!v7Ok(s) || !v8Ok(s)) return false;
+      // v10: 品格・気・この場所の禁じ手の回数・物言いの数（無い・範囲外は初めの値に）。覚えた禁じ手と秘術は deck の中（CARDS にあれば通る）
+      if (!intIn(s.hin, 0, 100)) s.hin = HIN_START;
+      if (!intIn(s.kiMax, 0, KI_MAX)) s.kiMax = 0;
+      if (!intIn(s.ki, 0, KI_MAX + 1)) s.ki = kiCap(s);
+      if (!intIn(s.kinN, 0, 999)) s.kinN = 0;
+      if (!intIn(s.car.fl, 0, 9999)) s.car.fl = 0;
+      s.opps.forEach(o => { if (o && o.sp !== 'kin' && o.sp !== 'hi') delete o.sp; });
       const ok = s && Number.isInteger(s.basho) && s.basho >= 0 && Number.isInteger(s.day) && s.day >= 0 && s.day <= 15
         && Number.isInteger(s.max) && s.max >= ST_START && s.max <= ST_CAP && Number.isFinite(s.stam) && s.stam >= 0
         && abOk(s.A) && Array.isArray(s.deck) && s.deck.length && s.deck.every(c => CARDS[c])
@@ -721,10 +971,9 @@
         && Array.isArray(s.opps) && s.opps.length === 15 && s.opps.every(o => o && typeof o.name === 'string' && STYLE[o.style] && [0, 1, 2].includes(o.tier)
           && [0, 1, 2].includes(o.size) && abOk(o.ab) && typeof o.color === 'string')
         && Number.isInteger(s.rank) && s.rank >= 0 && s.rank < 8 && (s.injured == null || CARDS[s.injured]) && PHASES.includes(s.phase);
-      if (ok){ s.stam = Math.min(s.max, s.stam); s.kai = s.kai ? 1 : 0; s.calm = s.calm ? 1 : 0; s.closed = s.closed ? 1 : 0; s.kseen = Number.isInteger(s.kseen) ? s.kseen : 0; return s; }
+      if (ok){ s.stam = Math.min(s.max, s.stam); s.kai = s.kai ? 1 : 0; s.calm = s.calm ? 1 : 0; s.closed = s.closed ? 1 : 0; s.kseen = Number.isInteger(s.kseen) ? s.kseen : 0; return true; }
     } catch (e){}
-    try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(V2_KEY); } catch (e){}             // 壊れた保存は捨てて最初から
-    return null;
+    return false;
   }
 
   // ---------- 音（素材は読み込まない・Web Audio で合成。最初のタップまで鳴らさない） ----------
@@ -799,7 +1048,7 @@
       nodowa:{charge:x => [2 - x.k], grab:[2],   dodge:[-1], brace:[0]},
       hataki:{charge:x => [x.k + 2, 0], grab:[-2,1], dodge:[-1], brace:[-2]},
       otoshi:{charge:x => [x.k + 1, 0], grab:[1],    dodge:[-1], brace:[1]},
-      ashi:  {charge:x => [-x.k],    grab:[0,1], dodge:[1],  brace:[4]},
+      ashi:  {charge:x => [-x.k],    grab:[0,1], dodge:[2],  brace:[4]},
       kote:  {charge:x => [-x.k],    grab:[3,0], dodge:[-1], brace:[0]},
     },
     grip:{
@@ -812,11 +1061,32 @@
       shitate:{yori:[3,0],   throw:[1,0],               brace:[1,0]},
       kote:   {yori:[1,0],   throw:[2,0],               brace:[0]},
       gabu:   {yori:[2],     throw:x => [-x.tk - 1, 0], brace:[3]},
-      kake:   {yori:[3,0],   throw:[-1,0],              brace:[3,0]},
-      tsuri:  {yori:[3],     throw:[-1,0],              brace:[4,0]},
+      kake:   {yori:[4,0],   throw:[-1,0],              brace:[4,0]},   // v8: 掛け・吊りを狙う理由を強く（3→4・4→5）
+      tsuri:  {yori:[4],     throw:[-1,0],              brace:[5,0]},
       uchari: {yori:x => [x.c <= -3 ? 8 : 4, 0], throw:[-1,0], brace:[0]},   // 外まであと 1 マスから返すと、そのまま外へ
     },
   };
+  // v10: 禁じ手と秘術の効き目（見つからなければ大きく効く／秘術は相手の手をほぼ無視する）。[sep の 4 手, grip の 3 手]
+  {
+    const SPT = {
+      mage:   {sep:{charge:[3,0], grab:[3,0], dodge:[1],  brace:[3,0]}, grip:{yori:[3,0], throw:[2,0], brace:[3,0]}},
+      lariat: {sep:{charge:[4],   grab:[3],   dodge:[0],  brace:[3]}},
+      tobi:   {sep:{charge:[5],   grab:[5],   dodge:[-3], brace:[4]}},
+      oufuku: {sep:{charge:[2],   grab:[2],   dodge:[1],  brace:[2]}},
+      jogai:  {sep:{charge:[8],   grab:[2],   dodge:[-2], brace:[2]},   grip:{yori:[8,0], throw:[2,0], brace:[2,0]}},   // 向かってくる勢いごと外へ（踏ん張る相手には 2 マス）
+      shime:  {grip:{yori:[3,0], throw:[3,0], brace:[4,0]}},
+      nen:    {sep:{charge:[2],   grab:[2],   dodge:[1],  brace:[2]},   grip:{yori:[2], throw:[2,0], brace:[2]}},
+      shun:   {sep:{charge:x => [x.k + 2, 0], grab:[2,0], dodge:[1], brace:[2]}},
+      toki:   {sep:{charge:[3],   grab:[3],   dodge:[3],  brace:[3]},   grip:{yori:[3], throw:[3], brace:[3]}},
+      senri:  {sep:{charge:[0],   grab:[0],   dodge:[0],  brace:[0]},   grip:{yori:[0], throw:[0], brace:[0]}},
+      daichi: {sep:{charge:[3,0], grab:[3,0], dodge:[3],  brace:[3]},   grip:{yori:[3], throw:[3], brace:[3]}},
+      bunshin:{sep:{charge:x => [x.k + 1, 0], grab:[2,0], dodge:[2], brace:[2]}},
+    };
+    for (const c in SPT) for (const g in SPT[c]) TABLE[g][c] = SPT[c][g];
+  }
+  // 秘術と禁じ手の使える時（土俵際）・気
+  const edgeOk = (card, x) => { const e = CARDS[card].edge; return !e || (e === 'me' ? x.c <= -2 : Math.abs(x.c) >= 2); };
+  const kiOk = (card, x) => CARDS[card].sp !== 'hi' || !x.S || (x.S.ki || 0) >= CARDS[card].ki;
   // ok=false: 決まらなかった＝効きが半分（1 マスは残す）。組みつきは組めない
   function outcome(card, m, x, ok = true){
     const e = TABLE[x.g ? 'grip' : 'sep'][card][m];
@@ -864,6 +1134,8 @@
     if (u === 'sep' && x.g) return false;
     if (u === 'grip' && !x.g) return false;
     if (card === 'uchari' && x.c > -2) return false;
+    if (!edgeOk(card, x) || !kiOk(card, x)) return false;
+    if (card === 'senri' && x.B && x.B.vis.length < 2) return false;   // 千里眼は、相手の手が 2 つ以上のときだけ
     if (card === 'grip') return true;
     return (x.S ? costOf(card, x.S, x.B) : CARDS[card].cost) <= x.stam;
   }
@@ -871,7 +1143,9 @@
     const u = CARDS[card].use;
     if (u === 'sep' && x.g) return '組むと使えない';
     if (u === 'grip' && !x.g) return '組んでから';
-    if (card === 'uchari' && x.c > -2) return '土俵際だけ';
+    if ((card === 'uchari' && x.c > -2) || !edgeOk(card, x)) return '土俵際だけ';
+    if (!kiOk(card, x)) return '気が足りない';
+    if (card === 'senri' && x.B && x.B.vis.length < 2) return 'もう見えている';
     return '体力不足';
   }
 
@@ -880,20 +1154,73 @@
   const RANKS = ['幕下','十両','前頭・下','前頭・上','小結','関脇','大関','横綱'];
   const BODY = ['#7a2e28','#2f4f73','#4c6a3a','#5a4630','#3a3a3a','#6b5a2a'];
   const SKIN = ['#e6c3a0','#d9b088','#eccfae'];
+  // ---------- v8: 生涯と番付・力士の格・四股名（REWORK_v8.md 1〜3 章。数字は Claude の提案・sim で合わせた） ----------
+  const RK1 = ['幕','十','前','前','小','関','大','横'];             // 生涯の星の 1 字
+  // 番付ごとの相手の強さ（能力の土台に足す・小数は確率で切り上げ）。前頭・下（2）は v7 と同じ 0
+  const RANK_OFF = [-1, -.5, 0, 1.5, 1.5, 1.8, 1.5, 1.8];
+  // 能力は 5 で頭打ちなので、上位の土俵の厳しさは別に持つ（どれも画面に出る）:
+  //   RANK_DEF こちらの決まる率が下がる（影の横の % に出る）／RANK_TWO この番付から初日から 2 択／大関から格上は突っ込みが 1 マス強い
+  //   RANK_THREE この番付から相手の手は 3 択／RANK_SAVE この番付から格上は土俵際で 1 回残る
+  const RANK_DEF = [0, 0, 0, 23, 18, 18, 3, 3], RANK_TWO = 3, RANK_HARD = 7, RANK_THREE = 7, RANK_SAVE = 4;
+  // 15 日の相手の 格下・互角・格上 の数。三役は横綱・大関と全部当たるので格上が多い／大関・横綱は自分より上が減る（本物の割り方に寄せた）
+  const TIER_N = [[5,5,5], [5,5,5], [5,5,5], [2,5,8], [3,5,7], [3,5,7], [11,3,1], [11,3,1]];
+  const CAREER_MAX = 12, MK_RETIRE = 3, SANYAKU_NEED = 12, OZEKI_NEED = 33, OZEKI_BACK = 10, PLAYOFF_P = .45;
+  const LINE_W = {12:.15, 13:.35, 14:.35, 15:.15};                  // 優勝の線（場所ごとに引く）
+  const SANSHO = {shukun:'殊勲賞', kanto:'敢闘賞', gino:'技能賞'};
+  // v10: 番付ごとの「禁じ手・秘術を使う相手」の数の目安（小数は確率）。相手が使う率・相手の禁じ手が見つかる率・相手の念力で下がる決まる率
+  const SP_OPP_N = [0, .4, .7, 1, 1.3, 1.5, 1.7, 1.9], OPP_SP_P = .4, OPP_FOUL = 30, OPSY_RATE = 15;
+  let spOppOn = true;                                         // 検査で「相手の禁じ手・秘術なし」と比べるときだけ false
+  // 格: 勝ち負けでなく「良い力士か」。番付の重みは 3 割（300 点）まで
+  // v9: 格の名前を F〜SS の 8 段に（区切りは ?sim=1 の生涯の終わりの分布で合わせた・読む打ち手は B〜A に多く、SS は 1% 前後）
+  const KAKU = [{t:'F', at:0}, {t:'E', at:300}, {t:'D', at:450}, {t:'C', at:580}, {t:'B', at:690}, {t:'A', at:790}, {t:'S', at:880}, {t:'SS', at:925}];
+  const kakuOf = sc => KAKU.reduce((k, x, i) => sc >= x.at ? i : k, 0);
+  function rateParts(S, hi){
+    const L = S.life, A = S.A, sum = AB_IDS.reduce((s, a) => s + A[a], 0);
+    const learned = S.deck.filter(c => CARDS[c].req).length;
+    const aA = S.deck.filter(c => c !== 'brace' && !isSp(c) && aptOf(c, A) === 2).length;
+    return {
+      ab: Math.round((sum - 4) / 16 * 220),                                       // 能力 4 つ: 0〜220
+      waza: learned * 9 + Math.min(aA, 10) * 6,                                     // 覚えた技・適性 A: 0〜150
+      oshie: S.oshie.length * 15 - (S.kuse ? 40 : 0),                               // 教え（癖が残れば −40）
+      kata: S.kata.length * 25 + S.imeis.length * 15,                               // 型・異名: 0〜125
+      kim: KIM_IDS.filter(k => S.car.kc[k]).length * 6,                             // 決まり手の種類: 0〜144
+      ban: Math.min(300, (hi == null ? L.hi : hi) * 28 + L.yu * 30 + L.sa * 10),    // 最高位・優勝・三賞: 300 まで
+      // v10: 禁じ手と秘術の決まり手（秘術は 1 種 6・禁じ手は 1 種 2）と品格（60 を割ると 1 につき −4）
+      sp: SPK_IDS.filter(k => S.car.kc[k]).reduce((s, k) => s + (KIMS[k].sp === 'hi' ? 6 : 2), 0),
+      hin: -Math.round(Math.max(0, HIN_YOKO - (S.hin == null ? HIN_START : S.hin)) * HIN_PT),
+    };
+  }
+  const rateRikishi = (S, hi) => { const p = rateParts(S, hi); return Math.max(0, Math.min(999, Object.values(p).reduce((s, x) => s + x, 0))); };
+  // 四股名: 用意した字の組み合わせだけ（自由入力なし＝共有しても荒れない）。実在と同じになりやすい組は外す
+  const NM_A = ['潮','雷','霧','凪','嵐','鷹','錦','朝','若','白','岩','月'];
+  const NM_B = ['ノ花','山','海','龍','錦','灘','浦','岳','丸','風'];
+  const NM_NG = ['錦錦','若ノ花','朝ノ山','岩風','嵐山','若浦','朝岳','白龍','若龍','朝風'];
+  const nmStr = nm => nm ? NM_A[nm[0]] + NM_B[nm[1]] : '潮ノ花';
+  const nmOk = nm => Array.isArray(nm) && nm.length === 2 && Number.isInteger(nm[0]) && Number.isInteger(nm[1]) && NM_A[nm[0]] && NM_B[nm[1]] && !NM_NG.includes(nmStr(nm));
+  function nmPick(r, not = []){
+    for (let t = 0; t < 99; t++){ const nm = [Math.floor(r() * NM_A.length), Math.floor(r() * NM_B.length)]; if (nmOk(nm) && !not.includes(nmStr(nm))) return nm; }
+    return [0, 0];
+  }
+  const newLife = rank => ({bn:0, hist:[], hi:rank, yu:0, sa:0, mk:0, kado:0, drop:-1, yuRun:0, sc:0});
   function genOpps(r, rank){
-    const pool = shuffle(NAMES.slice(), r), up = rank >= 4 ? 1 : 0;
-    return Array.from({length:15}, (_, i) => {
-      const tier = i < 5 ? 0 : i < 10 ? 1 : 2, style = ['oshi','yotsu','waza'][Math.floor(r() * 3)];
+    const pool = shuffle(NAMES.slice(), r), off = RANK_OFF[rank] || 0, tn = TIER_N[rank] || TIER_N[2];
+    const list = Array.from({length:15}, (_, i) => {
+      const tier = i < tn[0] ? 0 : i < tn[0] + tn[1] ? 1 : 2, style = ['oshi','yotsu','waza'][Math.floor(r() * 3)];
       const ab = {};
-      AB_IDS.forEach(a => { ab[a] = Math.min(AB_MAX, OPP_AB[tier] + up + (r() < OPP_AB_RAND ? 1 : 0)); });
+      AB_IDS.forEach(a => { ab[a] = Math.max(1, Math.min(AB_MAX, OPP_AB[tier] + Math.floor(off + r()) + (r() < OPP_AB_RAND ? 1 : 0))); });
       const main = KATA[style].ab; ab[main] = Math.min(AB_MAX, ab[main] + 1);
       const sr = r();
-      return {name:pool[i], style, tier, size: sr < SIZE_P[0] ? 0 : sr < SIZE_P[0] + SIZE_P[1] ? 1 : 2, ab,
+      return {name:pool[i], style, tier, rk:rank, size: sr < SIZE_P[0] ? 0 : sr < SIZE_P[0] + SIZE_P[1] ? 1 : 2, ab,
         color: BODY[Math.floor(r() * BODY.length)], skin: SKIN[Math.floor(r() * SKIN.length)]};
     });
+    // v10: 禁じ手・秘術を使う相手（場所に 0〜2 人・番付が上ほど多い・互角より上から）。乱数は名前の並びから作る＝本の乱数を進めない
+    const rs = mulberry(hashKey(pool.join('') + rank));
+    const n = spOppOn ? SP_OPP_N[rank] || 0 : 0, k = Math.min(2, Math.floor(n) + (rs() < n % 1 ? 1 : 0));
+    shuffle(list.filter(o => o.tier >= 1), rs).sort((a, b) => b.tier - a.tier).slice(0, k).forEach(o => { o.sp = rs() < .5 ? 'kin' : 'hi'; });
+    return list;
   }
   function newSeason(prev, r){
-    const rank = prev.rank == null ? 2 : prev.rank, max = prev.max || ST_START;
+    const rank = prev.rank == null ? 0 : prev.rank, max = prev.max || ST_START;   // v8: 生涯は幕下から
     return {basho: prev.basho == null ? 0 : prev.basho + 1, day:0, max, stam:max,
       A: prev.A ? {...prev.A} : {atari:1, yotsu:1, koshi:1, kan:1},
       deck: prev.deck ? prev.deck.slice() : START_DECK.slice(), injured:null, calm:0, scout:null, kai:0,
@@ -902,17 +1229,25 @@
       oshie: prev.oshie ? prev.oshie.slice() : [],
       kuse: prev.kuse !== undefined ? prev.kuse : (r() < KUSE_P ? KU_IDS[Math.floor(r() * KU_IDS.length)] : null),
       imei: prev.imei || null, imeis: prev.imeis ? prev.imeis.slice() : [],
-      car: prev.car ? {kc:{...prev.car.kc}, rev:prev.car.rev} : {kc:{}, rev:0},
+      car: prev.car ? {kc:{...prev.car.kc}, rev:prev.car.rev, fl:prev.car.fl || 0} : {kc:{}, rev:0, fl:0},
+      // v10: 品格（場所をまたぐ）・気の上限（場所ごとに満ちる）・この場所で禁じ手を使った回数
+      hin: prev.hin == null ? HIN_START : prev.hin, kiMax: prev.kiMax || 0, ki: kiCap({kiMax:prev.kiMax, imei:prev.imei}), kinN: 0,
       flow: prev.flow ? {...prev.flow} : {}, kata: prev.kata ? prev.kata.map(k => ({...k})) : [], kseen: prev.kseen || 0,
-      closed:0, log7:[]};
+      closed:0, log7:[],
+      // v8: 生涯（場所をまたぐ）・四股名・この場所の優勝の線・けがの数・場所の判定
+      life: prev.life ? {...prev.life, hist:prev.life.hist.map(h => h.slice())} : newLife(rank),
+      nm: prev.nm || null, rid: prev.rid || Math.floor(r() * 1e9).toString(36),
+      line: +pickW(LINE_W, r), hurtN:0, J:null};
   }
-  const carry = S => ({basho:S.basho, deck:S.deck, A:S.A, max:S.max, rank:S.rank, oshie:S.oshie, kuse:S.kuse, imei:S.imei, imeis:S.imeis, car:S.car, flow:S.flow, kata:S.kata, kseen:S.kseen});
-  const teach = S => S.basho === 0 && S.day < 2;                  // 最初の 2 番: 組む／投げるは出さない
+  const carry = S => ({basho:S.basho, deck:S.deck, A:S.A, max:S.max, rank:S.rank, oshie:S.oshie, kuse:S.kuse, imei:S.imei, imeis:S.imeis, car:S.car, flow:S.flow, kata:S.kata, kseen:S.kseen,
+    life:S.life, nm:S.nm, rid:S.rid, hin:S.hin, kiMax:S.kiMax});  const teach = S => S.basho === 0 && S.day < 2;                  // 最初の 2 番: 組む／投げるは出さない
   function newBout(S, r){
     const deck = S.deck.filter(c => c !== S.injured && !(teach(S) && (c === 'grip' || c === 'throw')));
     const B = {c:0, g:0, ex:0, heal:false, minC:0, saved:false, oSaved:false, read:false, readNow:false, force:null,
       draw: shuffle(deck.slice(), r), disc:[], hand:[], over:null, m:null, vis:[], k:1, tk:2, w:{}, pdf:false,
-      last:null, seq:[], maru:false, neb:false, oniUsed:false, study:null, kUsed:[]};
+      last:null, seq:[], maru:false, neb:false, oniUsed:false, study:null, kUsed:[],
+      // v10: 相手の禁じ手・念力（その手だけ）・千里眼で見た直後・相手の札の乱数（本の乱数を進めない）
+      ofoul:false, opsy:false, senri:false, keep:false, sr:mulberry(hashKey(curOppOf(S).name + ':' + S.basho + ':' + S.day))};
     for (let i = 0; i < HAND; i++) drawOne(B, r);
     return B;
   }
@@ -923,7 +1258,7 @@
   function oppWeights(S, B, o){
     let w;
     if (B.g){
-      w = {yori:4.5, throw: o.style === 'yotsu' ? 4 : 3, brace:2.5};
+      w = {yori:5.5, throw: o.style === 'yotsu' ? 3.5 : 2.5, brace:3.5};   // v8: 組んでからは寄る・踏ん張るを増やす（組み技が効く場面）
       if (B.c >= 2){ w.brace += 3; w.throw += 2; }
       if (B.c <= -2) w.yori += 3;
     } else {
@@ -932,18 +1267,26 @@
       if (B.c <= -2) w.charge += 3;
       if (teach(S)) w.grab = 0;
     }
+    if (o.bias) for (const k in o.bias) if (w[k] > 0) w[k] += o.bias[k];   // v8: 名鑑の札の力士は、型の手を構えやすい
     return w;
   }
   function oppDecide(S, B, o, r){
+    if (B.keep){ B.keep = false; return; }                         // v10: 千里眼のあとは、同じ手のまま（見えただけ）
     const w = oppWeights(S, B, o);
     const m = pickW(w, r);
     B.m = m; B.w = w;
-    B.k = 1 + Math.floor((o.ab.atari - 1) / 2);                  // 突っ込みの量: 当たり 1〜2 で 1・3〜4 で 2・5 で 3
+    const rk = o.rk || 0;                                         // 突っ込みの量: 当たり 1〜2 で 1・3〜4 で 2・5 で 3（三役から格上は +1・大関から互角以上は さらに +1）
+    B.k = 1 + Math.floor((o.ab.atari - 1) / 2) + (rk >= RANK_TWO && o.tier === 2 ? 1 : 0) + (rk >= RANK_HARD && o.tier >= 1 ? 1 : 0);
     B.tk = 2 + (o.ab.yotsu >= 4 ? 1 : 0);                         // 四つが 4 以上の相手は 3 マス投げる
     B.vis = [m]; B.readNow = false;
-    if (S.day >= 5){                                              // 6日目から、相手の手は「押してくる手／押してこない手」の 2 つのどちらか
+    if (S.day >= 5 || (o.rk || 0) >= RANK_TWO){                  // 6日目から（三役からは初日から）、相手の手は「押してくる手／押してこない手」の 2 つのどちらか
       const w2 = {}; for (const k in w) if (w[k] > 0 && !!PUSHY[k] !== !!PUSHY[m]) w2[k] = w[k];
       if (Object.keys(w2).length) B.vis = shuffle([m, pickW(w2, r)], r);
+      // v8: 関脇から、相手の手は 3 択（残りの手から 1 つ足す）
+      if (B.vis.length === 2 && (o.rk || 0) >= RANK_THREE){
+        const w3 = {}; for (const k in w) if (w[k] > 0 && !B.vis.includes(k)) w3[k] = w[k];
+        if (Object.keys(w3).length) B.vis = shuffle([...B.vis, pickW(w3, r)], r);
+      }
     }
     // v7 研究される: 互角より上の相手は、研究した型の 1 手目が手札にあれば、その返しを構える（2 択の片方は必ず返し）
     B.study = null;
@@ -963,11 +1306,25 @@
       }
     }
     if (B.vis.length > 1 && S.A.kan >= 5 && !B.read){ B.read = true; B.readNow = true; B.vis = [B.m]; }   // 相撲勘 5: 1 番に 1 回、本当の手が分かる
+    // v10: 禁じ手を使う相手は、押してくる手が反則まがいで 2 マス強い（見つかれば こちらの反則勝ち）／秘術を使う相手は念力で、こちらの技の決まる率が下がり、突っ込みが 1 マス強い
+    B.ofoul = B.opsy = false;
+    if (o.sp && !teach(S) && B.sr() < OPP_SP_P){
+      if (o.sp === 'kin' && (B.m === 'charge' || B.m === 'throw')){ B.ofoul = true; if (B.m === 'charge') B.k += 2; else B.tk += 2; }
+      else if (o.sp === 'hi'){ B.opsy = true; B.k += 1; }
+    }
   }
   const curOppOf = S => S.opps[Math.min(S.day, 14)];
   const ctx = (S, B) => ({c:B.c, g:B.g, k:B.k, tk:B.tk, A:S.A, stam:S.stam, o:curOppOf(S),
     os:S.oshie, ku:S.kuse, ex:B.ex, last:B.last, kata:S.kata, S, B});
+  // v10: 千里眼（手番を使わない）: 気と体力を払い、相手の本当の手だけを見る。相手の手は次の oppDecide で変えない
+  function lookSenri(S, B, r){
+    S.ki = Math.max(0, (S.ki || 0) - CARDS.senri.ki); S.stam = Math.max(0, S.stam - costOf('senri', S, B));
+    B.vis = [B.m]; B.senri = true; B.keep = true; B.readNow = false;
+    B.hand.splice(B.hand.indexOf('senri'), 1); B.disc.push('senri'); drawOne(B, r);
+    return {look:true, card:'senri', ev:[]};
+  }
   function play(S, B, card, r){
+    if (card === 'senri') return lookSenri(S, B, r);
     const x = ctx(S, B), c0 = card || 'brace', ev = [];
     const rate = rateAt(c0, S, B, x.o);
     const ok = B.force != null ? B.force : (teach(S) && B.ex === 0) ? true : r() * 100 < rate;
@@ -984,13 +1341,23 @@
     const kU = kataOf(S, B.last, card); if (kU) B.kUsed.push(kU);     // この番で型の順に出した
     let healed = false;
     if (card === 'brace' && !B.heal){ S.stam = Math.min(S.max, S.stam + 1); B.heal = true; healed = true; }
-    const from = B.c, g0 = B.g, m = B.m, pre = {g:B.g, c:B.c, pdf:B.pdf};
+    // v10: 禁じ手は品格が下がり（見つからなくても＝観客は見ている）、見つかれば物言い→反則負け。秘術は気を払う
+    let foul = false, ofound = false;
+    if (card && CARDS[card].sp === 'kin'){
+      const fr = foulRate(card, S);
+      S.hin = Math.max(0, S.hin - HIN_USE); S.kinN = (S.kinN || 0) + 1;
+      if (r() * 100 < fr){ foul = true; S.hin = Math.max(0, S.hin - HIN_FOUND); S.car.fl = (S.car.fl || 0) + 1; }
+    }
+    if (card && CARDS[card].sp === 'hi'){ S.ki = Math.max(0, (S.ki || 0) - CARDS[card].ki); }
+    if (B.ofoul && B.sr() * 100 < OPP_FOUL) ofound = true;
+    const from = B.c, g0 = B.g, m = B.m, pre = {g:B.g, c:B.c, pdf:B.pdf, senri:B.senri, dai:B.dai};
+    B.senri = false; if (card === 'daichi') B.dai = true;
     B.c += res.d; B.g = res.g; B.ex++;
     let saved = null;
     if (B.c <= -4 && S.A.koshi >= 3 && !B.saved){ B.c = -3; B.saved = true; saved = 'me'; }                     // 腰 3: 土俵際に 1 マス残る（1 番に 1 回）
     else if (B.c <= -4 && S.imei === 'nebari' && !B.neb){ B.c = -3; B.neb = true; saved = 'me'; ev.push({t:IMEI.nebari.t}); }
     else if (B.c <= -4 && S.oshie.includes('maru') && !B.maru){ B.c = -3; B.maru = true; S.stam = Math.max(0, S.stam - 1); saved = 'me'; ev.push({t:OSHIE.maru.t}); }
-    else if (B.c >= 4 && res.d < 8 && x.o.ab.koshi >= OPP_SAVE_KOSHI && !B.oSaved){ B.c = 3; B.oSaved = true; saved = 'op'; }
+    else if (B.c >= 4 && res.d < 8 && (x.o.ab.koshi >= OPP_SAVE_KOSHI || ((x.o.rk || 0) >= RANK_SAVE && x.o.tier === 2)) && !B.oSaved){ B.c = 3; B.oSaved = true; saved = 'op'; }   // v8: 三役から格上は土俵際で 1 回残る
     B.minC = Math.min(B.minC, B.c);
     B.pdf = m === 'dodge' && res.d >= 0 && !g0;
     B.last = card; B.seq.push(card);
@@ -999,9 +1366,11 @@
     if (B.c >= 4) B.over = 'win';
     else if (B.c <= -4) B.over = 'lose';
     else if (B.ex >= EX_MAX) B.over = B.c > 0 ? 'twin' : 'tlose';  // 6 回で決まらなければ前にいる側
+    if (foul) B.over = 'foul';                                     // 物言い: 勝っていても、こちらの反則負け
+    else if (ofound && B.over !== 'win') B.over = 'fwin';          // 相手の反則が見つかった＝こちらの反則勝ち
     const kim = B.over === 'win' ? decideKim(c0, m, pre, S.A)
       : B.over === 'twin' ? (B.g ? 'yorikiri' : card === 'thrust' ? 'tsukidashi' : 'oshidashi') : null;
-    return {...res, ok, rate, from, to:B.c, g0, m, healed, cost, card, kim, saved, ev};
+    return {...res, ok, rate, from, to:B.c, g0, m, healed, cost, card, kim, saved, ev, foul, ofound, psy:!!(card && CARDS[card].sp === 'hi')};
   }
   // v7: 勝った番の記録（勝ち方の履歴→異名・最後の 2 手の流れ→型）
   function recordWin(S, B, kim, useKata = true){
@@ -1011,7 +1380,7 @@
     if (!useKata) return null;
     B.kUsed.forEach(k => { k.used = 1; });                        // 型の順に出して勝った＝その型で勝った場所に数える
     const a = B.seq[B.seq.length - 2], b = B.seq[B.seq.length - 1];
-    if (!a || !b) return null;
+    if (!a || !b || isSp(a) || isSp(b)) return null;               // v10: 禁じ手と秘術は型にならない
     const k = S.kata.find(q => q.a === a && q.b === b);
     if (k){ k.w++; k.used = 1; return {used:k}; }
     const key = a + '>' + b; S.flow[key] = (S.flow[key] || 0) + 1;
@@ -1026,6 +1395,7 @@
   // 場所の締め（1 回だけ）: 型の研究・異名の名乗り
   function closeBasho(S){
     if (S.closed) return; S.closed = 1;
+    if (!S.kinN) S.hin = Math.min(100, (S.hin == null ? HIN_START : S.hin) + HIN_CLEAN);   // v10: 禁じ手を使わなかった場所は品格が戻る
     S.kata.forEach(k => {
       if (k.used){ k.bw++; if (k.bw >= STUDY_BASHO && !k.st){ k.st = 1; S.log7.push({k:'study', a:k.a, b:k.b}); } }
       k.used = 0;
@@ -1047,16 +1417,57 @@
     if (S.kuse && KUSE[S.kuse].cure === id){ const c = S.kuse; S.kuse = null; S.log7.push({k:'cure', id:c}); return c; }
     return null;
   }
-  const isWin = o => o === 'win' || o === 'twin';
+  const isWin = o => o === 'win' || o === 'twin' || o === 'fwin';
   function endDay(S, win, kim){
     S.res.push(win ? 1 : 0); S.km.push(win ? (kim || 'hantei') : null); S.day++;
     S.stam = Math.min(S.max, S.stam + REC_DAY);
   }
   const phaseAfter = S => S.day >= 15 ? 'end' : GROW_DAYS.includes(S.day) ? 'grow' : S.day === MOSHI_DAY ? 'moshi' : 'bout';
-  function moveRank(rank, w){
-    const d = w >= 13 ? 3 : w >= 10 ? 2 : w >= 8 ? 1 : -1;
-    return Math.max(0, Math.min(7, rank + d));
+  // v8: 場所の判定（1 回だけ・S.J に残す）。本物の昇進の決まりに寄せる:
+  //   幕下〜前頭は勝ち星で上下（関脇まで）／大関＝三役で直近 3 場所 33 勝／横綱＝大関で 2 場所続けて優勝
+  //   大関は 2 場所続けて負け越すと関脇（次の場所 10 勝で戻る）。引退＝12 場所・負け越し 3 場所続く・大けが・大関に 2 場所戻れない
+  function closeLife(S, r){
+    if (S.J) return S.J;
+    closeBasho(S);
+    const L = S.life, rank = S.rank, w = S.res.filter(x => x).length;
+    const J = {from:rank, to:rank, w, line:S.line, yu:false, po:null, sa:[], retire:null, sc0:L.sc, kado:false, down:false};
+    if (rank >= 2){                                   // 優勝は幕内（前頭から）だけ
+      if (w > S.line) J.yu = true;
+      else if (w === S.line){ J.po = r() < PLAYOFF_P; J.yu = J.po; }
+    }
+    if (rank >= 2 && rank <= 5 && w >= 8){            // 三賞は大関より下
+      if (S.res.filter((x, i) => x && S.opps[i].tier === 2).length >= 3) J.sa.push('shukun');
+      if (w >= 11) J.sa.push('kanto');
+      if (new Set(S.km.filter(k => k && KIMS[k])).size >= 7) J.sa.push('gino');
+    }
+    L.hist.push([rank, w]);
+    const h3 = L.hist.slice(-3), last3 = h3.length === 3 && h3.every(h => h[0] >= 4 && h[0] <= 5) ? h3.reduce((s, h) => s + h[1], 0) : 0;   // 3 場所とも三役で
+    if (rank <= 2) J.to = Math.max(0, Math.min(3, rank + (w >= 13 ? 2 : w >= 8 ? 1 : w <= 4 ? -2 : -1)));       // 前頭・上までは 1 段ずつ（13 勝で 2 段）
+    else if (rank === 3) J.to = w >= 14 ? 5 : w >= SANYAKU_NEED ? 4 : w >= 8 ? 3 : w <= 4 ? 1 : 2;     // 三役へは前頭・上で 12 勝（三役の席は少ない）
+    else if (rank <= 5){
+      if (L.drop === 0 && w >= OZEKI_BACK) J.to = 6;                  // 大関から落ちた次の場所: 10 勝で戻る
+      else if (last3 >= OZEKI_NEED) J.to = 6;
+      else if (w >= 8) J.to = rank === 4 && w >= 10 ? 5 : rank;
+      else J.to = rank - (w <= 5 ? 2 : 1);
+    } else if (rank === 6){
+      if (J.yu && L.yuRun >= 1){ if ((S.hin == null ? HIN_START : S.hin) >= HIN_YOKO) J.to = 7; else J.hinNo = true; }   // v10: 横綱には品格も要る
+      else if (w < 8){ if (L.kado){ J.to = 5; J.down = true; } else J.kado = true; }
+    }
+    L.kado = rank === 6 ? (J.kado ? 1 : 0) : 0;
+    L.yuRun = rank === 6 && J.yu ? L.yuRun + 1 : 0;
+    if (J.down) L.drop = 0;
+    else if (L.drop >= 0) L.drop = J.to === 6 ? -1 : L.drop + 1;
+    L.mk = w < 8 ? L.mk + 1 : 0;
+    L.bn++; L.yu += J.yu ? 1 : 0; L.sa += J.sa.length; L.hi = Math.max(L.hi, J.to);
+    if (S.hurtN >= 2) J.retire = 'hurt';
+    else if (L.drop >= 2) J.retire = 'ozeki';
+    else if (L.mk >= MK_RETIRE) J.retire = 'mk';
+    else if (L.bn >= CAREER_MAX) J.retire = 'full';
+    L.sc = J.sc = rateRikishi(S);
+    S.J = J;
+    return J;
   }
+  const WHY = {hurt:'大けがで引退', ozeki:'大関に戻れず引退', mk:'3場所続けて負け越し', full:`${CAREER_MAX}場所を務めあげた`, self:'自ら引退'};   // self: 育成を途中でやめた（名鑑の「いま」から・2026-11-25）
   // 開眼（1 場所に 1 回まで）: 格上に勝った番・土俵際から逆転した番・7勝7敗の千秋楽に勝った番
   const KAI_P = {senshu:.35, rev:.3, top:.25};
   function kaiganChance(S, B, o, win){
@@ -1079,8 +1490,153 @@
   // v7: 開眼の番の流れ（最後の 2 手）が、まだ型でなく枠が空いていれば「型にする」も選べる
   function kaiFlow(S, B){
     const a = B.seq[B.seq.length - 2], b = B.seq[B.seq.length - 1];
-    if (!a || !b || S.kata.length >= KATA_MAX || S.kata.some(k => k.a === a && k.b === b)) return null;
+    if (!a || !b || isSp(a) || isSp(b) || S.kata.length >= KATA_MAX || S.kata.some(k => k.a === a && k.b === b)) return null;
     return {a, b};
+  }
+
+  // =====================================================================
+  // v9: 今日の場所（日付の種で全員同じ 1 場所）・記録・化粧廻し・次の目標（REWORK_v9.md。数字と形は Claude の提案）
+  // =====================================================================
+  const DAILY_KEY = 'hakkeyoi.daily.v1', REC_KEY = 'hakkeyoi.rec.v1';
+  // 今日の場所のランク: 点＝白星×50＋決まり手の種類×12＋格上からの白星×10＋優勝 80（区切りは ?sim=1 の分布で合わせた）
+  const DP = {w:50, kind:12, top:10, yu:80};
+  const DRANK = [{t:'F', at:0}, {t:'E', at:360}, {t:'D', at:460}, {t:'C', at:560}, {t:'B', at:640}, {t:'A', at:740}, {t:'S', at:860}, {t:'SS', at:960}];
+  const drankOf = p => DRANK.reduce((k, x, i) => p >= x.at ? i : k, 0);
+  const pad2 = n => String(n).padStart(2, '0');
+  const keyOf = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const todayKey = () => DEMO ? '2026-11-26' : keyOf(new Date());
+  const prevKey = k => { const [y, m, d] = k.split('-').map(Number); return keyOf(new Date(y, m - 1, d - 1)); };
+  const mdOf = k => `${+k.slice(5, 7)}/${+k.slice(8, 10)}`;
+  function hashKey(s){ let h = 2166136261; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  // 今日の弟子: 日付から決まる能力（合計 10・どれも 4 まで）・覚えた技 2 つ・教え 1 つ。相手 15 人・優勝の線も同じ種から
+  function newDaily(key){
+    const seed = hashKey('hakkeyoi:' + key), r = mulberry(seed);
+    const A = {atari:1, yotsu:1, koshi:1, kan:1};
+    for (let i = 0; i < 6;){ const a = AB_IDS[Math.floor(r() * AB_IDS.length)]; if (A[a] < 4){ A[a]++; i++; } }
+    const learn = shuffle(LEARN.filter(c => knows(c, A)), r).slice(0, 2);
+    const nm = nmPick(r), os = OS_IDS[Math.floor(r() * OS_IDS.length)];
+    const S = newSeason({rank:2, A, deck:START_DECK.concat(learn), kuse:null, nm, oshie:[os]}, r);
+    S.basho = 1;                                    // 手引きの制限なし
+    S.dly = {key, seed, mid:-1};
+    return S;
+  }
+  // 夜（コツ・教えの印）と各番（相手の手・決まる率）の乱数も日付の種から＝同じ手を選べば同じ相撲になる
+  const nightRnd = S => S.dly ? mulberry(S.dly.seed + S.day * 7919) : rnd;
+  const boutRnd = S => mulberry(S.dly.seed + S.day * 104729 + 17);
+  function closeDaily(S){
+    if (S.J) return S.J;
+    closeBasho(S);
+    const w = S.res.filter(x => x).length;
+    const kinds = new Set(S.km.filter(k => k && KIMS[k])).size;
+    const top = S.res.filter((x, i) => x && S.opps[i].tier === 2).length;
+    const J = {daily:1, w, line:S.line, yu:false, po:null, kinds, top};
+    if (w > S.line) J.yu = true;
+    else if (w === S.line){ J.po = mulberry(S.dly.seed + 99)() < PLAYOFF_P; J.yu = J.po; }
+    J.parts = {w:w * DP.w, kind:kinds * DP.kind, top:top * DP.top, yu:J.yu ? DP.yu : 0};
+    J.pts = Math.min(999, Object.values(J.parts).reduce((s, x) => s + x, 0));
+    J.rk = drankOf(J.pts);
+    S.J = J;
+    return J;
+  }
+
+  // 記録（自己ベスト・最高位・横綱の数・化粧廻し・続けた日）。自動再生と検査では端末に残さない
+  const GOLD = '#a07b24', SUMI = '#1d1a17', AKA = '#b3302a';
+  const KE_BOOK = 12;
+  const KESHO = {
+    nami:   {t:'波',   h:'初の勝ち越し',             bg:SUMI, fg:GOLD},
+    kumo:   {t:'雲',   h:'今日の場所を3日続けて',    bg:AKA,  fg:SUMI},
+    uroko:  {t:'鱗',   h:`帳を${KE_BOOK}種`,          bg:AKA,  fg:GOLD},
+    matsu:  {t:'松',   h:'初の三役',                 bg:SUMI, fg:AKA},
+    inazuma:{t:'稲妻', h:'今日の場所で優勝',         bg:GOLD, fg:SUMI},
+    hishi:  {t:'菱',   h:'ランクA以上で引退',        bg:GOLD, fg:AKA},
+    tsuna:  {t:'綱',   h:'横綱',                     bg:SUMI, fg:GOLD},
+  };
+  const KE_IDS = Object.keys(KESHO);
+  // 柄の 1 枚（幅 w・高さ 20 の帯）。線と面だけ（波＝青海波・雲・鱗・松・稲妻・菱・綱のより）
+  const KE_PAT = {
+    nami:   [20, 10, (b, f) => [[0, 0], [20, 0], [10, 5], [0, 10], [20, 10]].map(([x, y]) => [9.5, 6.5, 3.5].map((rr, i) => `<circle cx="${x}" cy="${y}" r="${rr}" fill="${i ? 'none' : b}" stroke="${f}" stroke-width="1.1"/>`).join('')).join('')],
+    kumo:   [26, 20, (b, f) => `<path d="M1 14a4 4 0 018 0a3 3 0 016 0a4 4 0 018 0M5 14a1.6 1.6 0 013 0M14 6a3 3 0 016 0a2.4 2.4 0 014.8 0" fill="none" stroke="${f}" stroke-width="1.6"/>`],
+    uroko:  [16, 20, (b, f) => `<path d="M0 10L8 0L16 10ZM-8 20L0 10L8 20ZM8 20L16 10L24 20Z" fill="${f}"/>`],
+    matsu:  [18, 20, (b, f) => `<path d="M9 2l-6 6h12zM9 6l-8 7h16zM8 13h2v4h-2z" fill="${f}"/>`],
+    inazuma:[12, 20, (b, f) => `<path d="M0 15H3V5H9V15H12" fill="none" stroke="${f}" stroke-width="2.2"/>`],
+    hishi:  [12, 10, (b, f) => `<path d="M6 0L12 5L6 10L0 5Z" fill="none" stroke="${f}" stroke-width="1.6"/><path d="M6 3L8.4 5L6 7L3.6 5Z" fill="${f}"/>`],
+    tsuna:  [10, 20, (b, f) => `<path d="M-4 22L8 -2M2 22L14 -2" stroke="${f}" stroke-width="2.6"/><path d="M-4 22L8 -2" stroke="${b}" stroke-width=".8" transform="translate(3 0)"/>`],
+  };
+  let keN = 0;
+  function band(id, w = 360){
+    const K = KESHO[id], P = KE_PAT[id]; if (!K) return '';
+    const pid = 'kp' + (++keN);
+    return `<svg class="ksb" viewBox="0 0 ${w} 20" preserveAspectRatio="xMidYMid slice" role="img" aria-label="化粧廻し ${K.t}"><defs><pattern id="${pid}" width="${P[0]}" height="${P[1]}" patternUnits="userSpaceOnUse">${P[2](K.bg, K.fg)}</pattern></defs>` +
+      `<rect width="${w}" height="20" fill="${K.bg}"/><rect width="${w}" height="20" fill="url(#${pid})"/><rect x="1" y="1" width="${w - 2}" height="18" fill="none" stroke="${K.fg}" stroke-width="1.6"/></svg>`;
+  }
+  function recFix(o){
+    const R = {best:null, hi:-1, yk:0, ke:[], wear:null, dBest:null, st:{last:'', n:0}};
+    if (!isObj(o)) return R;
+    if (isObj(o.best) && intIn(o.best.sc, 0, 999) && nmOk(o.best.nm) && intIn(o.best.hi, 0, 7)) R.best = {sc:o.best.sc, nm:o.best.nm, hi:o.best.hi};
+    if (intIn(o.hi, -1, 7)) R.hi = o.hi;
+    if (intIn(o.yk, 0, 9999)) R.yk = o.yk;
+    if (Array.isArray(o.ke)) R.ke = KE_IDS.filter(k => o.ke.includes(k));
+    if (R.ke.includes(o.wear)) R.wear = o.wear;
+    if (isObj(o.dBest) && intIn(o.dBest.pts, 0, 999) && typeof o.dBest.key === 'string') R.dBest = {pts:o.dBest.pts, key:o.dBest.key.slice(0, 10)};
+    if (isObj(o.st) && typeof o.st.last === 'string' && intIn(o.st.n, 0, 9999)) R.st = {last:o.st.last.slice(0, 10), n:o.st.n};
+    return R;
+  }
+  function recLoad(){ try { return JSON.parse(safeStore.getItem(REC_KEY) || 'null'); } catch (e){ return null; } }
+  let REC = recFix(CAN_SAVE ? recLoad() : null);
+  const recSave = () => { if (CAN_SAVE) safeStore.setItem(REC_KEY, JSON.stringify(REC)); };
+  // 条件を満たした柄を渡す（新しく付いた柄の id を返す）。最初の 1 枚は自動で締める
+  function keshoGive(ids){
+    const got = ids.filter(id => KESHO[id] && !REC.ke.includes(id));
+    got.forEach(id => REC.ke.push(id));
+    if (got.length && !REC.wear) REC.wear = got[0];
+    if (got.length) recSave();
+    return got;
+  }
+  const keNew = ids => ids.map(id => `<div class="kenew">${band(id, 72)}<span>化粧廻し「${KESHO[id].t}」をもらった</span></div>`).join('');
+  // 続けた日（途切れても罰はない＝1 に戻るだけ）
+  const streakNow = () => { const t = todayKey(); return REC.st.last === t || REC.st.last === prevKey(t) ? REC.st.n : 0; };
+  function streakDone(key){
+    if (REC.st.last !== key) REC.st = {last:key, n:REC.st.last === prevKey(key) ? REC.st.n + 1 : 1};
+    recSave();
+    return REC.st.n;
+  }
+  // 次に遊ぶ理由を 1 行: 付いていない異名・化粧廻しのうち、いちばん近いもの（遠ければ帳の ？ の手がかり 1 つ）
+  function nextGoal(S, retired){
+    const c = [], kinds = KIM_IDS.filter(k => S.car.kc[k]).length;
+    const left = retired ? {} : {nebari:3 - S.car.rev, nage:10 - kimSum(S, KIM_IDS.filter(k => KIMS[k].c === 1)), oni:15 - kimSum(S, OSHI_KIM), yori:12 - kimSum(S, YORI_KIM), tana:10 - kinds};
+    for (const id in left) if (!S.imeis.includes(id) && left[id] > 0)
+      c.push([left[id], `あと${left[id]}${id === 'nebari' ? '回の逆転' : id === 'tana' ? '種の決まり手' : '勝'}で異名「${IMEI[id].t}」`]);
+    const bn = bookCount();
+    if (!REC.ke.includes('uroko') && bn < KE_BOOK) c.push([KE_BOOK - bn, `帳をあと${KE_BOOK - bn}種で化粧廻し「鱗」`]);
+    if (!REC.ke.includes('kumo')){ const n = 3 - streakNow(); if (n > 0 && n < 3) c.push([n - .5, `あと${n}日続けると化粧廻し「雲」`]); }
+    if (!S.dly && !REC.ke.includes('matsu') && S.rank === 3) c.push([1.5, '前頭・上で12勝すると三役＝化粧廻し「松」']);
+    c.sort((a, b) => a[0] - b[0]);
+    if (c.length && c[0][0] <= 4) return c[0][1];
+    const miss = KIM_IDS.find(k => !book[k] && KIMS[k].r <= 2);
+    return miss ? `帳の？「${KIMS[miss].h}」` : c.length ? c[0][1] : '';
+  }
+  const nextHtml = (S, retired) => { const t = nextGoal(S, retired); return t ? `<div class="nextg">次の目標<b>${t}</b></div>` : ''; };
+  // 今日の場所の保存（その日のぶんだけ。日付が変われば捨てる）
+  function dailyLoad(){
+    if (!CAN_SAVE) return null;
+    try {
+      const d = JSON.parse(safeStore.getItem(DAILY_KEY) || 'null');
+      if (!isObj(d) || d.v !== 1 || d.key !== todayKey()) return null;
+      if (isObj(d.done)){
+        const x = d.done;
+        return intIn(x.w, 0, 15) && intIn(x.pts, 0, 999) && intIn(x.rk, 0, 7) && typeof x.res === 'string' && /^[○●]{15}$/.test(x.res) ? {key:d.key, done:{w:x.w, pts:x.pts, rk:x.rk, res:x.res}} : null;
+      }
+      const s = d.S;
+      if (isObj(s) && isObj(s.dly) && s.dly.key === d.key && intIn(s.dly.mid, -1, 15) && checkS(s)){ s.dly = {key:d.key, seed:hashKey('hakkeyoi:' + d.key), mid:s.dly.mid}; return {key:d.key, S:s}; }
+    } catch (e){}
+    return null;
+  }
+  const dailySave = S => { if (CAN_SAVE) safeStore.setItem(DAILY_KEY, JSON.stringify({v:1, key:S.dly.key, S})); };
+  const dailyDone = (key, done) => { if (CAN_SAVE) safeStore.setItem(DAILY_KEY, JSON.stringify({v:1, key, done})); };
+  function recLine(noBook){                         // 名鑑では帳の数がすぐ上の札（決まり手 n/24）に出ているので省く
+    const b = REC.best;
+    return (b ? `いちばん<b>${nmStr(b.nm)}</b>ランク<b>${KAKU[kakuOf(b.sc)].t}</b>${b.sc}点` : 'まだ引退した力士はいない') +
+      `<br>最高位<b>${REC.hi >= 0 ? RANKS[REC.hi] : '—'}</b>横綱<b class="num">${REC.yk}</b>人` + (noBook ? '' : `　帳<b class="num">${bookCount()}/${KIM_IDS.length}</b>`);
   }
 
   // ---------- 稽古・コツ・申し合い ----------
@@ -1101,7 +1657,34 @@
     if (p && r() * 100 < p){ injure(S, r); out.hurt = S.injured; }
     return out;
   }
+  // v10: まれな晩の稽古（6 つのボタンとは別の 1 本）。裏稽古＝親方が見ていない晩・禁じ手の候補／山ごもり＝気の上限と秘術の候補
+  // 乱数は力士の id と日から作る（本の乱数を進めない＝本物の道の釣り合いを動かさない）
+  const SPK = {
+    ura: {t:'裏稽古',   st:-2, inj:5,  pool:KIN_C, tip:'親方が見ていない晩。禁じ手を覚える'},
+    yama:{t:'山ごもり', st:-4, inj:20, pool:HI_C,  tip:'気の上限が上がり、秘術を覚える'},
+  };
+  const spRnd = S => mulberry(hashKey('sp:' + (S.rid || '') + ':' + S.basho + ':' + S.day));
+  function spNight(S){
+    const r = spRnd(S), x = r();
+    const left = id => SPK[id].pool.some(c => !S.deck.includes(c)) || (id === 'yama' && (S.kiMax || 0) < KI_MAX);
+    if (x < URA_P && left('ura')) return 'ura';
+    if (x >= 1 - YAMA_P && left('yama')) return 'yama';
+    return null;
+  }
+  const spInj = (S, id) => Math.max(0, SPK[id].inj + (S.stam <= LOW_ST ? INJ_LOW : 0) - (S.calm ? INJ_CALM : 0));
+  const canSp = (S, id) => S.stam >= -SPK[id].st;
+  function doSpKeiko(S, id, r){
+    const K = SPK[id], out = {cand:null, hurt:null, ki:false}, p = spInj(S, id);   // けがの率は払う前の体力で（ふつうの稽古と同じ）
+    S.stam = Math.max(0, S.stam + K.st); S.calm = 0;
+    if (K.up && S.A[K.up] < AB_MAX){ S.A[K.up]++; out.up = K.up; }
+    if (id === 'yama' && (S.kiMax || 0) < KI_MAX){ S.kiMax = S.kiMax ? S.kiMax + 1 : KI_FIRST; S.ki = kiCap(S); out.ki = true; }
+    const L = K.pool.filter(c => !S.deck.includes(c)), rs = spRnd(S); rs();
+    if (L.length) out.cand = L[Math.floor(rs() * L.length)];
+    if (r() * 100 < p){ injure(S, r); out.hurt = S.injured; }
+    return out;
+  }
   function injure(S, r){
+    S.hurtN = (S.hurtN || 0) + 1;                       // v8: 1 場所に 2 回けがをすると大けが（場所のあとで引退）
     const c = S.deck.filter(x => x !== 'brace');
     S.injured = c[Math.floor(r() * c.length)];
   }
@@ -1132,6 +1715,8 @@
   function playable(S, B){ const x = ctx(S, B); return B.hand.filter(c => usable(c, x)); }
   const NEUTRAL = {style:'none', size:1, ab:{atari:2, yotsu:2, koshi:2, kan:2}};
   function smartValue(S, B, card, aware){
+    const lam0 = S.stam >= S.max * .75 ? .2 : S.stam >= S.max * .4 ? .5 : .9;
+    if (card === 'senri') return B.vis.length > 1 ? 1.6 - lam0 * costOf(card, S, B) : -99;   // v10: 2 択以上なら見る価値がある
     const x = ctx(S, B), xo = aware ? x : {...x, o:NEUTRAL};
     const rate = rateAt(card, S, B, xo.o) / 100;
     const save = (S.A.koshi >= 3 && !B.saved) || (S.imei === 'nebari' && !B.neb) || (S.oshie.includes('maru') && !B.maru);
@@ -1155,10 +1740,18 @@
     let cost = costOf(card, S, B); if (card === 'brace' && !B.heal) cost = -1;
     // 型の 1 手目で、2 手目が手札にあれば少し上乗せ（人が型を狙って組み立てるのに近づける）
     const look = S.kata.some(k => k.a === card && k.b !== card && kataLive(k, xo.o) && B.hand.includes(k.b)) ? KATA_LOOK : 0;
-    return tot / sw - lam * cost + look;
+    let v = tot / sw - lam * cost + look;
+    // v10: 禁じ手は見つかれば負け（−10）・品格の代償。関脇から上で横綱の品格を割りそうなら使わない（近道と天井の取り合い）
+    const C = CARDS[card];
+    if (C.sp === 'kin'){ const f = foulRate(card, S) / 100; v = (1 - f) * v + f * SIM_FOUL_V - SIM_HIN_W - (S.hin < SIM_HIN_FLOOR ? 6 : 0) - (S.rank >= 5 && S.hin >= HIN_YOKO - 8 && S.hin - HIN_USE - HIN_FOUND < HIN_YOKO + 4 ? 8 : 0); }
+    if (C.sp === 'hi') v -= SIM_KI_W * C.ki;                       // 気は場所に数回: 使い所を選ぶ
+    return v;
   }
+  // 反則負けは −20 と見る（位置の値は ±4 ほどなので、−10 では 1 番を落とす重さを軽く見すぎて 1 場所に 10 回も使った）
+  const SIM_KI_W = .9, SIM_HIN_W = .2, SIM_HIN_FLOOR = 0, SIM_FOUL_V = -20, SIM_FOUL_MAX = 30;    // 禁じ手の道の打ち手は品格を気にせず使う（横綱が見える間だけは控える）
   function pickCard(S, B, r, how){
-    const p = playable(S, B); if (!p.length) return null;
+    // v10: 禁じ手の道の打ち手は、見つかる率が SIM_FOUL_MAX を超えたら使わない（影の横の % を見て決める人）
+    const p = playable(S, B).filter(c => !(CARDS[c].sp === 'kin' && (S.hin < SIM_HIN_FLOOR || foulRate(c, S) > SIM_FOUL_MAX))); if (!p.length) return null;
     if (how === 'rand') return p[Math.floor(r() * p.length)];
     if (how === 'counter'){ const x = ctx(S, B); return p.slice().sort((a, b) => outcome(b, B.vis[0], x).d - outcome(a, B.vis[0], x).d || CARDS[a].cost - CARDS[b].cost)[0]; }
     let best = null, bv = -1e9;
@@ -1172,11 +1765,18 @@
     even:    {order:null,                             want:LEARN},
   };
   // 育て方の打ち手は、体力 10 以上なら「激しく」（2 つ）。でたらめは 3 回に 1 回
-  function simGrow(S, r, build){
+  function simGrow(S, r, build, sp){
     const kotsu = kotsuNight(S, r), mark = oshieNight(S, r);
+    // v10: 秘術の道は山ごもりの晩が来たら、体力に余裕があれば取る（その晩はそれだけ）。裏稽古は稽古のあとに足せる短い 1 本（後で）
+    const spn = sp && spNight(S);
+    if (spn === 'yama' && sp === 'hi' && canSp(S, spn) && S.stam > LOW_ST + 2){
+      const out = doSpKeiko(S, spn, r); if (out.cand) S.deck.push(out.cand); return;
+    }
+    const ura = spn === 'ura' && sp === 'kin';
     const hard = build === 'rand' ? r() < .33 : S.stam >= 10;
     const done = [];
     for (let i = 0; i < (hard ? 2 : 1); i++){ const k = simKeiko(S, r, build, kotsu.filter(x => !done.includes(x)), hard, done, mark); done.push(k); }
+    if (ura && canSp(S, 'ura') && S.stam > LOW_ST + 2 && !S.injured){ const out = doSpKeiko(S, 'ura', r); if (out.cand) S.deck.push(out.cand); }
   }
   function simKeiko(S, r, build, kotsu, hard, done, mark){
     let k;
@@ -1225,16 +1825,17 @@
     const r = mulberry(seed), BN = P.bn || SIM_BASHO;
     let W = 0, tW = 0, tN = 0, kk = 0, kai = 0, nb = 0, learned = 0;
     let v7 = {oshie:0, kata:0, study:0, imei:0, kuse:0, flash:0, bouts:0, aW:0, aN:0};
+    let gN = 0, exN = 0;                              // v8: 組んでいる番の割合（相手の手を決める時点で組んでいるか）
     const km = {}, used = {}, per = Array.from({length:BN}, () => []);
     for (let i = 0; i < n; i++){
-      let S = newSeason({basho:0}, r); S.basho = 1;   // 手引きの制限なし
+      let S = newSeason({basho:0, rank:2}, r); S.basho = 1; S.nm = [0, 0];   // 手引きの制限なし・番付は前頭・下
       let studied = false;                          // 研究されたあとの場所だけを数える（v7 の物差し）
       if (P.kuse === 'on') S.kuse = KU_IDS[i % KU_IDS.length]; else if (P.kuse === 'off') S.kuse = null;
       for (let b = 0; b < BN; b++){
         for (let d = 0; d < 15; d++){
           const o = S.opps[d], B = newBout(S, r);
           let last = null;
-          while (!B.over){ oppDecide(S, B, o, r); const c = pickCard(S, B, r, P.pick); used[c || 'pass'] = (used[c || 'pass'] || 0) + 1; last = play(S, B, c, r); v7.flash += last.ev.length; }
+          while (!B.over){ gN += B.g ? 1 : 0; exN++; oppDecide(S, B, o, r); const c = pickCard(S, B, r, P.pick); used[c || 'pass'] = (used[c || 'pass'] || 0) + 1; last = play(S, B, c, r); v7.flash += last.ev.length; }
           v7.bouts++;
           const w = isWin(B.over);
           if (o.tier === 2){ tN++; tW += w; }
@@ -1242,7 +1843,7 @@
           if (w && r() < kaiganChance(S, B, o, w)){ kaigan(S, last.card); kai++; }
           endDay(S, w, last.kim);
           if (S.day === MOSHI_DAY){ const go = P.pick === 'rand' ? r() < .5 : S.stam >= 7; if (go) moshiai(S, r); }
-          if (GROW_DAYS.includes(S.day)) simGrow(S, r, P.build);
+          if (GROW_DAYS.includes(S.day)) simGrow(S, r, P.build, P.sp);
         }
         const wb = S.res.filter(x => x).length; W += wb; per[b].push(wb); if (wb >= 8) kk++; nb++;
         if (studied){ v7.aW += wb; v7.aN++; }
@@ -1262,7 +1863,65 @@
     const sdOf = a => { const m = a.reduce((s, x) => s + x, 0) / a.length; return Math.sqrt(a.reduce((s, x) => s + (x - m) * (x - m), 0) / a.length); };
     const wins = Object.values(km).reduce((s, x) => s + x, 0);
     const plays = Object.values(used).reduce((s, x) => s + x, 0);
-    return {t:P.t, learned: learned / n, used, plays, avg: W / nb, by: per.map(a => a.reduce((s, x) => s + x, 0) / a.length), sd: Math.max(...per.map(sdOf)), top: tW / tN, kk: kk / nb, kai: kai / nb, km, wins, v7};
+    return {t:P.t, learned: learned / n, used, plays, avg: W / nb, by: per.map(a => a.reduce((s, x) => s + x, 0) / a.length), sd: Math.max(...per.map(sdOf)), top: tW / tN, kk: kk / nb, kai: kai / nb, km, wins, v7, grip: gN / exN};
+  }
+  // v8: 生涯（幕下から・引退まで）を n 人。最高位・引退の理由・格・場所の数
+  function simCareer(P, n, seed){
+    const r = mulberry(seed);
+    const o = {t:P.t, n, hi:Array(8).fill(0), why:{}, kaku:Array(KAKU.length).fill(0), sc:0, bn:0, w:0, yu:0, sa:0, ab:0, rw:Array(8).fill(0), rn:Array(8).fill(0), km:{}, wins:0, scs:[]};
+    for (let i = 0; i < n; i++){
+      let S = newSeason({basho:0, rank:0}, r); S.basho = 1; S.nm = [0, 0];
+      let J = null;
+      for (;;){
+        for (let d = 0; d < 15; d++){
+          const op = S.opps[d], B = newBout(S, r);
+          let last = null;
+          while (!B.over){ oppDecide(S, B, op, r); const pc = pickCard(S, B, r, P.pick); if (pc && CARDS[pc].sp === 'kin'){ o.ku = (o.ku || 0) + 1; o.kf = (o.kf || 0) + foulRate(pc, S); } last = play(S, B, pc, r); }
+          const w = isWin(B.over);
+          if (w){ recordWin(S, B, last.kim, true); const k = last.kim || 'hantei'; o.km[k] = (o.km[k] || 0) + 1; o.wins++; }
+          if (w && r() < kaiganChance(S, B, op, w)) kaigan(S, last.card);
+          endDay(S, w, last.kim);
+          if (S.day === MOSHI_DAY){ const go = P.pick === 'rand' ? r() < .5 : S.stam >= 7; if (go) moshiai(S, r); }
+          if (GROW_DAYS.includes(S.day)) simGrow(S, r, P.build, P.sp);
+        }
+        J = closeLife(S, r);
+        if (J.hinNo) o.hinNo = (o.hinNo || 0) + 1;                 // v10: 品格で横綱を見送った場所
+        o.w += J.w; o.rw[J.from] += J.w; o.rn[J.from]++;
+        if (J.retire) break;
+        S = newSeason({...carry(S), rank:J.to}, r);
+      }
+      o.hi[S.life.hi]++; o.why[J.retire] = (o.why[J.retire] || 0) + 1;
+      o.kaku[kakuOf(J.sc)]++; o.sc += J.sc; o.scs.push(J.sc); o.bn += S.life.bn; o.yu += S.life.yu; o.sa += S.life.sa;
+      o.ab += AB_IDS.reduce((s, a) => s + S.A[a], 0);
+      // v10: 品格・物言い・大関までの場所・13 勝以上が 2 場所続いたか
+      const hs = S.life.hist, iz = hs.findIndex(h => h[0] >= 6);
+      o.hin = (o.hin || 0) + S.hin; o.fl = (o.fl || 0) + (S.car.fl || 0);
+      if (iz >= 0){ o.ozN = (o.ozN || 0) + 1; o.ozB = (o.ozB || 0) + iz; if (iz < 8) o.oz8 = (o.oz8 || 0) + 1; }
+      if (hs.some((h, j) => j && h[1] >= 13 && hs[j - 1][1] >= 13)) o.run13 = (o.run13 || 0) + 1;
+    }
+    o.atLeast = k => o.hi.slice(k).reduce((s, x) => s + x, 0) / n;
+    return o;
+  }
+  // v9: 今日の場所を n 回（日付の種を変えて）。今日のランクの分布
+  function simDaily(P, n, seed){
+    const o = {t:P.t, n, rk:Array(DRANK.length).fill(0), pts:[], w:0, yu:0};
+    for (let i = 0; i < n; i++){
+      const S = newDaily(`sim-${seed}-${i}`), r = mulberry(seed * 31 + i);
+      for (let d = 0; d < 15; d++){
+        const op = S.opps[d], B = newBout(S, r);
+        let last = null;
+        while (!B.over){ oppDecide(S, B, op, r); last = play(S, B, pickCard(S, B, r, P.pick), r); }
+        const w = isWin(B.over);
+        if (w) recordWin(S, B, last.kim, true);
+        if (w && r() < kaiganChance(S, B, op, w)) kaigan(S, last.card);
+        endDay(S, w, last.kim);
+        if (S.day === MOSHI_DAY){ const go = P.pick === 'rand' ? r() < .5 : S.stam >= 7; if (go) moshiai(S, r); }
+        if (GROW_DAYS.includes(S.day)) simGrow(S, r, P.build, P.sp);
+      }
+      const J = closeDaily(S);
+      o.rk[J.rk]++; o.pts.push(J.pts); o.w += J.w; o.yu += J.yu ? 1 : 0;
+    }
+    return o;
   }
   const SHOWTEST = false;   // 撮影で検査の表を見るときだけ一時的に true（file: の最初の画面に出る）
   if (SIM || (SHOWTEST && !DEMO)){
@@ -1301,6 +1960,74 @@
       ['読む − 相性を見ない ≧ 0.8 勝', (R.even.avg - R.blind.avg).toFixed(2), R.even.avg - R.blind.avg >= .8],
       ['開眼 0.3〜0.8 回／場所（育て方 4 つ）', kais.map(v => v.toFixed(2)).join(' / '), kais.every(v => v >= .3 && v <= .8)],
     ];
+    // v8: 生涯（2 章）と組み技（4 章）
+    const NC = 300;
+    const car = [...POLS.filter(P => ['oshi','yotsu','koshikan','even'].includes(P.key)), POLS.find(P => P.key === 'rand')]
+      .map((P, i) => ({key:P.key, ...simCareer(P, NC, 777 + i)}));
+    const rd = car.filter(x => x.key !== 'rand'), rn = car.find(x => x.key === 'rand');
+    const pool = k => rd.reduce((s, x) => s + x.atLeast(k) * x.n, 0) / rd.reduce((s, x) => s + x.n, 0);
+    const yk = pool(7), oz = pool(6), sy = pool(4);
+    // 決まり手は「3 場所（前頭・下）」と「生涯（幕下から引退まで）」の両方で数え、育て方ごとに大きい方を取る
+    const kimBoth = [...builds, ...rd];
+    const gripMin = KIM_IDS.filter(id => kimBoth.some(x => share(x, id) >= .005)).length;
+    const rare4 = ['tsuridashi','sotogake','uchigake','waridashi'];
+    const builds8 = kimBoth;
+    const checks8 = [
+      ['読む打ち手の生涯で 横綱 3〜6%', pct(yk), yk >= .03 && yk <= .06],
+      ['大関 15〜25%', pct(oz), oz >= .15 && oz <= .25],
+      ['三役 45〜60%', pct(sy), sy >= .45 && sy <= .6],
+      ['でたらめ 横綱 0%・大関 2% 未満', `${pct(rn.atLeast(7))}・${pct(rn.atLeast(6))}`, rn.atLeast(7) === 0 && rn.atLeast(6) < .02],
+      ['24 手のうち 20 手以上が どれかの育て方で 0.5% 以上', `${gripMin} 手（届かない: ${KIM_IDS.filter(id => !builds8.some(x => share(x, id) >= .005)).map(id => KIMS[id].n + ' ' + pct(Math.max(...builds8.map(x => share(x, id))))).join('・') || 'なし'}）`, gripMin >= 20],
+      ['吊り出し・外掛け・内掛け・割り出し 各 0.3% 以上', rare4.map(id => KIMS[id].n + ' ' + pct(Math.max(...builds8.map(x => share(x, id))))).join(' / '), rare4.every(id => builds8.some(x => share(x, id) >= .003))],
+    ];
+    const carRow = x => `<tr><td>${x.t}</td>${[7, 6, 4, 2].map(k => `<td>${pct(x.atLeast(k))}</td>`).join('')}<td>${(x.bn / x.n).toFixed(1)}</td><td>${(x.w / x.bn).toFixed(1)}</td><td>${(x.sc / x.n).toFixed(0)}</td>` +
+      `<td>${x.kaku.map(v => Math.round(v / x.n * 100)).join('/')}</td><td>${['full','mk','hurt','ozeki'].map(k => Math.round((x.why[k] || 0) / x.n * 100)).join('/')}</td><td>${(x.yu / x.n).toFixed(2)}</td><td>${(x.ab / x.n).toFixed(1)}</td></tr>`;
+    const v8html = `<h3>v8 生涯（各 ${NC} 人・幕下から引退まで）</h3>
+      <table><tr><th>物差し</th><th>結果</th><th></th></tr>
+      ${checks8.map(c => `<tr><td>${c[0]}</td><td style="white-space:normal">${c[1]}</td><td class="${c[2] ? 'ok' : 'bad'}">${c[2] ? '合' : '否'}</td></tr>`).join('')}</table>
+      <table><tr><th>打ち手</th><th>横綱</th><th>大関+</th><th>三役+</th><th>前頭+</th><th>場所</th><th>勝/場所</th><th>点</th><th>F/E/D/C/B/A/S/SS %</th><th>満了/負越/大けが/大関 %</th><th>優勝</th><th>能力計</th></tr>
+      ${car.map(carRow).join('')}</table>
+      <table><tr><th>勝ち／場所（場所数）</th>${RANKS.slice(2).map(r => `<th>${r.replace('前頭・', '')}</th>`).join('')}</tr>
+      ${car.map(x => `<tr><td>${x.t.slice(0, 4)}</td>${x.rw.slice(2).map((v, i) => `<td>${x.rn[i + 2] ? (v / x.rn[i + 2]).toFixed(1) : '-'}<small>(${x.rn[i + 2]})</small></td>`).join('')}</tr>`).join('')}</table>
+      <h3>v8 組み技（前頭・下 3 場所）: 組んでいる手の割合 ${builds.map(x => pct(x.grip)).join(' / ')}</h3>`;
+    // v9: ランク F〜SS（生涯の終わり・今日の場所）
+    const NDY = 400;
+    const dly = [...POLS.filter(P => ['oshi','yotsu','koshikan','even'].includes(P.key)), POLS.find(P => P.key === 'rand')]
+      .map((P, i) => ({key:P.key, ...simDaily(P, NDY, 900 + i)}));
+    const qt = (a, p) => { const s = a.slice().sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
+    const share9 = (xs, f) => { const tot = xs.reduce((s, x) => s + x.n, 0); return xs.reduce((s, x) => s + f(x), 0) / tot; };
+    const dRd = dly.filter(x => x.key !== 'rand'), dRn = dly.find(x => x.key === 'rand');
+    const cBA = share9(rd, x => x.kaku[4] + x.kaku[5]), cSS = share9(rd, x => x.kaku[7]), cMode = rd.map(x => x.kaku.indexOf(Math.max(...x.kaku)));
+    const dBA = share9(dRd, x => x.rk[4] + x.rk[5]), dSS = share9(dRd, x => x.rk[7]), dMode = dRd.map(x => x.rk.indexOf(Math.max(...x.rk)));
+    const rnLow = rn.kaku.slice(0, 4).reduce((s, x) => s + x, 0) / rn.n, dLow = dRn.rk.slice(0, 4).reduce((s, x) => s + x, 0) / dRn.n;
+    const checks9 = [
+      ['生涯: 読む 4 人の B＋A ≧ 50%', pct(cBA), cBA >= .5],
+      ['生涯: 読む 4 人のいちばん多い段が B か A', cMode.map(i => KAKU[i].t).join(' / '), cMode.every(i => i === 4 || i === 5)],
+      ['生涯: SS 0.5〜2%', pct(cSS), cSS >= .005 && cSS <= .02],
+      ['生涯: でたらめは C 以下 ≧ 60%', pct(rnLow), rnLow >= .6],
+      ['今日: 読む 4 人の B＋A ≧ 45%', pct(dBA), dBA >= .45],
+      ['今日: 読む 4 人のいちばん多い段が B か A', dMode.map(i => DRANK[i].t).join(' / '), dMode.every(i => i === 4 || i === 5)],
+      ['今日: SS 0.5〜2%', pct(dSS), dSS >= .005 && dSS <= .02],
+      ['今日: でたらめは C 以下 ≧ 60%', pct(dLow), dLow >= .6],
+    ];
+    { // 今日の場所: 同じ日付なら同じ場所／保存の往復で読める
+      const a = newDaily('2026-02-03'), b = newDaily('2026-02-03'), c = newDaily('2026-02-04');
+      const sig = s => JSON.stringify([s.opps, s.line, s.A, s.deck, s.nm, s.oshie]);
+      const nr = (s, d) => { s.day = d; const r = nightRnd(s); return JSON.stringify([kotsuNight(s, r), oshieNight(s, r)]); };
+      const same = sig(a) === sig(b) && sig(a) !== sig(c) && nr(a, 3) === nr(b, 3);
+      const s0 = newDaily('2026-01-01'); Object.assign(s0, {day:3, res:[1, 0, 1], km:['oshidashi', null, 'yorikiri'], phase:'grow'}); s0.dly.mid = 2;
+      const s1 = JSON.parse(JSON.stringify(s0)), rt = checkS(s1) && isObj(s1.dly) && s1.dly.key === '2026-01-01' && s1.dly.mid === 2;
+      checks9.push(['今日: 同じ日付なら同じ場所（別の日は違う）', same ? '同じ' : '違う', same],
+        ['今日: 保存の往復で読める', rt ? '読める' : '読めない', rt]);
+    }
+    const dist = (arr, n) => arr.map(v => Math.round(v / n * 1000) / 10).join(' / ');
+    const v9html = `<h3>v9 ランク F〜SS（生涯 各 ${NC} 人・今日の場所 各 ${NDY} 回）</h3>
+      <table><tr><th>物差し</th><th>結果</th><th></th></tr>
+      ${checks9.map(c => `<tr><td>${c[0]}</td><td style="white-space:normal">${c[1]}</td><td class="${c[2] ? 'ok' : 'bad'}">${c[2] ? '合' : '否'}</td></tr>`).join('')}</table>
+      <table><tr><th>打ち手</th><th>生涯 F/E/D/C/B/A/S/SS %</th><th>点 p10/50/90/99</th></tr>
+      ${car.map(x => `<tr><td>${x.t.slice(0, 5)}</td><td>${dist(x.kaku, x.n)}</td><td>${[.1, .5, .9, .99].map(p => qt(x.scs, p)).join('/')}</td></tr>`).join('')}</table>
+      <table><tr><th>打ち手</th><th>今日 F/E/D/C/B/A/S/SS %</th><th>点 p10/50/90/99</th><th>勝ち</th><th>優勝</th></tr>
+      ${dly.map(x => `<tr><td>${x.t.slice(0, 5)}</td><td>${dist(x.rk, x.n)}</td><td>${[.1, .5, .9, .99].map(p => qt(x.pts, p)).join('/')}</td><td>${(x.w / x.n).toFixed(1)}</td><td>${pct(x.yu / x.n)}</td></tr>`).join('')}</table>`;
     const st = signalSelfTest();
     const head = rows.map(x => `<th>${x.t.slice(0, 4)}</th>`).join('');
     const kimRows = [...KIM_IDS, 'hantei'].map(id => {
@@ -1310,7 +2037,35 @@
       return `<tr><td>${name}</td>${vs.map(v => `<td class="${bad ? 'bad' : ''}">${(v * 100).toFixed(1)}</td>`).join('')}</tr>`;
     }).join('');
     const v7r = x => `<tr><td>${x.t}</td><td>${x.avg.toFixed(2)}</td><td>${x.by.map(v => v.toFixed(1)).join(' ')}</td><td>${x.v7.oshie.toFixed(1)}</td><td>${x.v7.kata.toFixed(1)}</td><td>${x.v7.imei.toFixed(1)}</td><td>${x.v7.study.toFixed(2)}</td><td>${(x.v7.kuse * 100).toFixed(0)}%</td><td>${x.v7.flash.toFixed(2)}</td></tr>`;
-    box.innerHTML = `<h3>v7 教え・異名・型（各 ${N7} 回）</h3>
+    // v10: 禁じ手と秘術（生涯 各 NC 人・同じ育て方「均等」で、技の道だけを変える）
+    const P10 = [{key:'real', t:'本物の技の道', build:'even', pick:'read'}, {key:'kin', t:'禁じ手の道', build:'even', pick:'read', sp:'kin'}, {key:'hi', t:'秘術の道', build:'even', pick:'read', sp:'hi'}];
+    const c10 = P10.map(P => ({key:P.key, ...simCareer(P, NC, 1777)}));
+    const [cr, ck, ch] = c10, avgSc = x => x.sc / x.n, ozB = x => x.ozN ? x.ozB / x.ozN : 99;
+    const scs = c10.map(avgSc), spread = (Math.max(...scs) - Math.min(...scs)) / Math.max(...scs);
+    const spGot = SPK_IDS.filter(id => c10.some(x => x.km[id]));
+    const all = [...checks9, ...checks8, ...checks7, ...checks], bad = all.filter(c => !c[2]);
+    // 比べ: 相手の禁じ手・秘術なしで、受け入れの物差しの 2 行（v9 以前から否かどうか）
+    spOppOn = false;
+    const off = Object.fromEntries(['even','blind','rand'].map(k => [k, simulate(POLS.find(P => P.key === k), N, 1234 + POLS.findIndex(P => P.key === k))]));
+    spOppOn = true;
+    const offLine = `相手の禁秘なしでは 読む−でたらめ ${(off.even.avg - off.rand.avg).toFixed(2)}・読む−相性を見ない ${(off.even.avg - off.blind.avg).toFixed(2)}／ありでは ${(R.even.avg - R.rand.avg).toFixed(2)}・${(R.even.avg - R.blind.avg).toFixed(2)}`;
+    const checks10 = [
+      ['3 つの道の平均ランク点の差 ≦ 1 割', `${scs.map(v => v.toFixed(0)).join(' / ')}（差 ${pct(spread)}）`, spread <= .1],
+      ['禁じ手の道は大関まで速い（8場所目までに大関）', `${pct((ck.oz8 || 0) / NC)} 対 本物 ${pct((cr.oz8 || 0) / NC)}（届いた人の平均 ${ozB(ck).toFixed(1)} 対 ${ozB(cr).toFixed(1)} 場所）`, (ck.oz8 || 0) > (cr.oz8 || 0)],
+      ['禁じ手の道の大関 ≦ 本物の 1.6 倍（禁じ手だけが強くならない）', `${pct(ck.atLeast(6))} 対 ${pct(cr.atLeast(6))}`, ck.atLeast(6) <= cr.atLeast(6) * 1.6],
+      ['禁じ手の道の横綱 < 本物の道の横綱', `${pct(ck.atLeast(7))} 対 ${pct(cr.atLeast(7))}`, ck.atLeast(7) < cr.atLeast(7)],
+      ['秘術の道: 13勝以上が2場所続く ≦ 本物 + 3pt', `${pct((ch.run13 || 0) / NC)} 対 ${pct((cr.run13 || 0) / NC)}`, (ch.run13 || 0) / NC <= (cr.run13 || 0) / NC + .03],
+      ['禁じ手と秘術の決まり手 12 手すべて出る', `${spGot.length} 手${spGot.length < SPK_IDS.length ? '（出ない: ' + SPK_IDS.filter(id => !spGot.includes(id)).map(id => KIMS[id].n).join('・') + '）' : ''}`, spGot.length === SPK_IDS.length],
+      ['既存の物差し（v7〜v9 と受け入れ）', `合 ${all.length - bad.length} / 否 ${bad.length}${bad.length ? '（' + bad.map(c => c[0]).join('・') + '）' : ''}`, !bad.length],
+    ];
+    const spShare = x => SPK_IDS.reduce((s, id) => s + (x.km[id] || 0), 0) / Math.max(1, x.wins);
+    const v10html = `<h3>v10 禁じ手と秘術（生涯 各 ${NC} 人・育て方は均等）</h3>
+      <table><tr><th>物差し</th><th>結果</th><th></th></tr>
+      ${checks10.map(c => `<tr><td style="white-space:normal">${c[0]}</td><td style="white-space:normal;min-width:44%">${c[1]}</td><td class="${c[2] ? 'ok' : 'bad'}">${c[2] ? '合' : '否'}</td></tr>`).join('')}</table>
+      <div style="margin:3px 0">${offLine}</div>
+      <table><tr><th>道</th><th>横綱</th><th>大関+</th><th>三役+</th><th>点</th><th>品格</th><th>物言い</th><th>禁/場所</th><th>見つかる%</th><th>見送り</th><th>禁秘の勝ち</th></tr>
+      ${c10.map(x => `<tr><td>${x.t.replace('の道', '')}</td><td>${pct(x.atLeast(7))}</td><td>${pct(x.atLeast(6))}</td><td>${pct(x.atLeast(4))}</td><td>${avgSc(x).toFixed(0)}</td><td>${(x.hin / x.n).toFixed(0)}</td><td>${(x.fl / x.n).toFixed(1)}</td><td>${((x.ku || 0) / x.bn).toFixed(1)}</td><td>${x.ku ? (x.kf / x.ku).toFixed(0) : '-'}</td><td>${x.hinNo || 0}</td><td>${pct(spShare(x))}</td></tr>`).join('')}</table>`;
+    box.innerHTML = v10html + v9html + v8html + `<h3>v7 教え・異名・型（各 ${N7} 回）</h3>
       <table><tr><th>物差し</th><th>結果</th><th></th></tr>
       ${checks7.map(c => `<tr><td>${c[0]}</td><td style="white-space:normal">${c[1]}</td><td class="${c[2] ? 'ok' : 'bad'}">${c[2] ? '合' : '否'}</td></tr>`).join('')}</table>
       <table><tr><th>打ち手</th><th>勝ち</th><th>場所ごと</th><th>教え</th><th>型</th><th>異名</th><th>研究</th><th>癖残</th><th>札/番</th></tr>
@@ -1341,6 +2096,7 @@
   const INK = '#1d1a17', PAPER = '#e3dfd6', SHU = '#b3302a', INK2 = '#6a6157';
   const cv = $('stage'), cx = cv.getContext('2d');
   let S = newSeason({}, rnd), B = null, sel = null, busy = false, lastPT = 'mouse';
+  let CHAL = null;                              // v8: 名鑑の札の力士と 1 番だけ取っている間（保存しない・帳に付けない）
   let view = {c:0, g:0, preview:null};
 
   // 相手の手の絵（24 の枠・SVG と canvas で同じ線を使う）
@@ -1358,13 +2114,14 @@
   const amount = m => m === 'charge' ? B.k : m === 'throw' ? B.tk : m === 'yori' ? 1 : 0;
 
   // 力士の絵（prototype/art・右向き。相手は左右反転・体格で大きさを変える）
-  const OPC = ['a8402c','4c6a3a','5a4630','6b5a2a'];
+  // v8: 相手の絵は 取り口 3 × 体格 3（art_v8・体格は絵に入っている）。grip・brace は push の絵を使う
+  const SZN = ['small','mid','big'];
   const curOpp = () => curOppOf(S);
-  const opCol = o => OPC[Math.max(0, BODY.indexOf(o.color)) % 4];
-  const meSrc = p => `art/me_${p}.png`;
-  const opSrc = (p, o) => `art/op_${opCol(o || curOpp())}_${p === 'sad' ? 'sad' : (p === 'push' || p === 'grip' || p === 'brace') ? 'push' : 'stand'}.png`;
+  const meSrc = p => `art_v8/me_${p}.png`;
+  const opPose = p => p === 'sad' ? 'sad' : (p === 'push' || p === 'grip' || p === 'brace') ? 'push' : 'stand';
+  const opSrc = (p, o) => { o = o || curOpp(); return `art_v8/op_${KATA[o.style] ? o.style : 'oshi'}_${SZN[o.size] || 'mid'}_${opPose(p)}.png`; };
   ['stand','push','grip','brace','happy','sad'].forEach(p => { new Image().src = meSrc(p); });
-  OPC.forEach(c => ['stand','push','sad'].forEach(p => { new Image().src = `art/op_${c}_${p}.png`; }));
+  const preOpp = o => ['stand','push','sad'].forEach(p => { new Image().src = opSrc(p, o); });
   const rp = $('rp'), ro = $('ro');
   const pose = {me:'', op:''};
   function setPose(me, op){
@@ -1377,7 +2134,7 @@
   const RK_H = 312, RK_HW = 112, FALL = 26;
   const lean = deg => { const a = deg * Math.PI / 180; return RK_HW * Math.cos(a) + RK_H * Math.sin(a); };
   function place(o = {}){
-    const gap = view.g ? 66 : 100;
+    const gap = view.g ? 74 : 116;                      // v8 の絵は横に広いので、間を少し空ける
     let xp = Math.max(150, XC(view.c) - gap + (o.dxP || 0)), xo = Math.min(WW - 150, XC(view.c) + gap + (o.dxO || 0));
     // 倒れる側は、傾いた絵の外形（頭と手の先）まで盤の中に収める
     if ((o.rO || 0) > 0){ xo = Math.min(xo, WW - 10 - lean(o.rO)); xp = Math.min(xp, xo - 130); }
@@ -1432,26 +2189,27 @@
     cx.textBaseline = 'middle'; cx.textAlign = 'left';
     cx.font = '800 36px "Shippori Mincho B1","Hiragino Mincho ProN",serif';
     const tw = cx.measureText(label).width;
-    const rt = rate ? `${rate}%` : '';
+    const rt = rate ? (typeof rate === 'string' ? rate : `${rate}%`) : '';   // v10: 禁じ手は「反則 35%」（朱）
     cx.font = '800 26px "Shippori Mincho B1","Hiragino Mincho ProN",serif';
     const rw = rt ? cx.measureText(rt).width + 12 : 0;
     const bw = tw + rw + 22;
     let lx = Math.abs(x1 - x0) < 4 ? x0 + 28 : dir > 0 ? x1 + 10 : x1 - 10 - bw;
     lx = Math.max(76, Math.min(WW - 76 - bw, lx));
-    cx.fillStyle = PAPER; cx.fillRect(lx, y - 26, bw, 52);
-    cx.lineWidth = 3; cx.strokeStyle = color; cx.strokeRect(lx, y - 26, bw, 52);
+    const h = arrowRow.h || 26;
+    cx.fillStyle = PAPER; cx.fillRect(lx, y - h, bw, h * 2);
+    cx.lineWidth = 3; cx.strokeStyle = color; cx.strokeRect(lx, y - h, bw, h * 2);
     cx.font = '800 36px "Shippori Mincho B1","Hiragino Mincho ProN",serif';
     cx.fillStyle = color; cx.fillText(label, lx + 11, y + 2);
     if (rt){
       cx.fillStyle = INK; cx.fillRect(lx + 11 + tw + 6, y - 18, 1.5, 36);
       cx.font = '800 26px "Shippori Mincho B1","Hiragino Mincho ProN",serif';
-      cx.fillStyle = INK2; cx.fillText(rt, lx + 11 + tw + 14, y + 3);
+      cx.fillStyle = typeof rate === 'string' ? SHU : INK2; cx.fillText(rt, lx + 11 + tw + 14, y + 3);
     }
     // 2 択のときだけ、矢印の根もとに「相手がこの手なら」の絵（墨の札）
     if (m){
       let ix = dir > 0 || Math.abs(x1 - x0) < 4 ? x0 - 66 : x0 + 14;
       ix = Math.max(70, Math.min(WW - 122, ix));
-      cx.fillStyle = INK; cx.fillRect(ix, y - 26, 52, 52);
+      cx.fillStyle = INK; cx.fillRect(ix, y - h, 52, h * 2);
       cx.save(); cx.translate(ix + 7, y - 19); cx.scale(38 / 24, 38 / 24); cx.strokeStyle = PAPER; cx.lineWidth = 2.6; cx.lineJoin = 'round'; cx.stroke(P2D[m]); cx.restore();
     }
     cx.restore();
@@ -1496,13 +2254,15 @@
     [eL, eR].forEach(x => { cx.fillStyle = '#d9c99a'; cx.beginPath(); cx.roundRect(x - 9, FLOOR - 16, 18, 56, 7); cx.fill(); cx.lineWidth = 3; cx.strokeStyle = INK; cx.stroke(); });
     cx.fillStyle = '#fff'; cx.fillRect(MID - 44, FLOOR + 16, 10, 6); cx.fillRect(MID + 34, FLOOR + 16, 10, 6);
     // 矢印: 指を置いた技の結果（朱）／置いていない時は、こちらを下げる手（墨の点線）
-    const rows = [FLOOR + 98, FLOOR + 160];
+    const three = B && B.vis.length > 2;
+    const rows = three ? [FLOOR + 74, FLOOR + 124, FLOOR + 174] : [FLOOR + 98, FLOOR + 160];
+    arrowRow.h = three ? 23 : 26;
     if (B && !B.over && !busy){
       if (view.preview){
         view.preview.forEach((p, i) => {
           const to = Math.max(-4.4, Math.min(4.4, view.c + p.d));
           const lab = view.c + p.d >= 4 ? '勝ち' : view.c + p.d <= -4 ? '負け' : p.d > 0 ? `+${p.d}` : p.d < 0 ? `−${-p.d}` : '±0';
-          arrowRow(rows[i], view.c, to, p.d < 0 ? INK : SHU, false, B.vis.length > 1 ? p.m : null, lab, p.d > 0 && p.rate < 100 ? p.rate : 0);
+          arrowRow(rows[i], view.c, to, p.d < 0 ? INK : SHU, false, B.vis.length > 1 ? p.m : null, lab, p.foul ? `反則 ${p.foul}%` : p.d > 0 && p.rate < 100 ? p.rate : 0);
         });
       } else {
         let i = 0;
@@ -1516,8 +2276,8 @@
     [0, 1].forEach(i => { $('gp' + i).style.display = 'none'; $('go' + i).style.display = 'none'; });
     if (!view.preview) return;
     const sz = opScale();
-    view.preview.forEach((p, i) => {
-      const c = Math.max(-4.4, Math.min(4.4, view.c + p.d)), gap = p.g ? 66 : 100;
+    view.preview.slice(0, 2).forEach((p, i) => {                 // 影は 2 つまで（3 択の 3 つ目は矢印だけ）
+      const c = Math.max(-4.4, Math.min(4.4, view.c + p.d)), gap = p.g ? 74 : 116;
       const gp = $('gp' + i), go = $('go' + i);
       gp.src = meSrc(p.g ? 'grip' : 'push'); go.src = opSrc(c >= 4 ? 'sad' : 'stand');
       let xo = Math.min(WW - 150, XC(c) + gap), xp = Math.max(150, XC(c) - gap);
@@ -1531,9 +2291,11 @@
     });
   }
   function showPreview(card){
+    // 札を押した直後に組む／離れるが変わると、その状態で使えない札の予告を引いてしまう（2026-11-25 自動の通しで見つけた）→ 使えない札は予告しない
+    if (B && !B.over && card && (!(TABLE[B.g ? 'grip' : 'sep'][card]) || card === 'senri')) card = null;   // 千里眼は動かない（影なし）
     if (B && !B.over && card){
-      const x = ctx(S, B), rate = rateAt(card, S, B, x.o);
-      view.preview = B.vis.map(m => ({m, rate, ...outcome(card, m, x, true)}));
+      const x = ctx(S, B), rate = rateAt(card, S, B, x.o), foul = foulRate(card, S);
+      view.preview = B.vis.map(m => ({m, rate, foul, ...outcome(card, m, x, true)}));
     } else view.preview = null;
     ghosts(); drawStage();
   }
@@ -1543,22 +2305,28 @@
   function renderHUD(){
     const day = Math.min(S.day, 14);
     $('dayN').textContent = day + 1;
-    $('rank').textContent = RANKS[S.rank];
+    $('rank').textContent = CHAL ? '名鑑の一番' : S.dly ? `今日の場所 ${mdOf(S.dly.key)}` : RANKS[S.rank];
+    $('myName').textContent = nmStr(S.nm);
     const sEl = $('stam'); sEl.textContent = S.stam; sEl.className = 'num' + (S.stam <= 3 ? ' low' : '');
     $('st').className = 'st' + (S.stam <= 3 ? ' low' : '');
     $('sbar').innerHTML = Array.from({length:ST_CAP}, (_, i) => `<i class="${i < S.stam ? 'on' : i >= S.max ? 'off' : ''}"></i>`).join('');
+    const kc = kiCap(S);                                              // v10: 気（山ごもりで初めて出る・金の粒）
+    $('kib').innerHTML = kc ? Array.from({length:kc}, (_, i) => `<i class="${i < (S.ki || 0) ? 'on' : ''}"></i>`).join('') : '';
     $('dots').innerHTML = Array.from({length:15}, (_, i) => {
       const r = S.res[i];
       const c = r === 1 ? 'w' : r === 0 ? 'l' : i === S.day ? 'now' : GROW_DAYS.includes(i + 1) || i + 1 === MOSHI_DAY ? 'kei' : '';
       return `<i class="${c}${i === S.res.length - 1 ? ' pop' : ''}"></i>`;
     }).join('');
     const w = wins(), l = S.res.length - w, cap = $('cap');
-    if (S.injured){ cap.textContent = `けが: ${CARDS[S.injured].t}`; cap.className = 'cap bad'; }
+    if (CHAL){ cap.textContent = `相手: 名鑑のランク${KAKU[kakuOf(CHAL.c.sc)].t}`; cap.className = 'cap'; }
+    else if (S.hurtN >= 2){ cap.textContent = '大けが・場所のあと引退'; cap.className = 'cap bad'; }
+    else if (S.injured){ cap.textContent = `けが: ${CARDS[S.injured].t}`; cap.className = 'cap bad'; }
     else if (w >= 8){ cap.textContent = '勝ち越し'; cap.className = 'cap good'; }
     else if (l >= 8){ cap.textContent = '負け越し'; cap.className = 'cap bad'; }
     else { cap.textContent = `${w}勝${l}敗・あと${8 - w}勝`; cap.className = 'cap'; }
     const o = curOpp();
     $('oppName').textContent = o.name;
+    const sm = $('oppSp'); sm.textContent = o.sp === 'kin' ? '荒' : o.sp === 'hi' ? '異' : ''; sm.className = 'spm ' + (o.sp || '');
     $('oppKata').querySelector('path').setAttribute('d', KATA[o.style].ic);
     const t = $('oppTier'); t.textContent = ['格下','互角','格上'][o.tier]; t.className = o.tier === 2 ? 'up' : '';
     renderIntent();
@@ -1569,7 +2337,7 @@
     // 三番稽古で癖を覚えた相手: 2 択の割合も出す
     const scout = S.scout && S.scout === curOpp().name && B.vis.length > 1;
     const tot = B.vis.reduce((s, m) => s + (B.w[m] || 0), 0) || 1;
-    el.innerHTML = (B.readNow ? '<span class="rd">読</span>' : B.study ? '<span class="rd st">研</span>' : '') + B.vis.map(m => {
+    el.innerHTML = (B.ofoul ? '<span class="rd fo">反</span>' : B.opsy ? '<span class="rd ps">念</span>' : B.senri ? '<span class="rd ps">眼</span>' : B.readNow ? '<span class="rd">読</span>' : B.study ? '<span class="rd st">研</span>' : '') + B.vis.map(m => {
       const body = ico(m, !!PUSHY[m]) + (amount(m) ? `<b class="num">${amount(m)}</b>` : '');
       return scout ? `<span class="pc"><span style="display:flex;align-items:center">${body}</span><small class="num">${Math.round((B.w[m] || 0) / tot * 100)}%</small></span>` : body;
     }).join('<span class="sl">/</span>');
@@ -1586,7 +2354,7 @@
     const d = document.createElement('div'); d.className = 'popn ' + kind; d.innerHTML = html;
     $('fx').appendChild(d);
     const w = d.offsetWidth || 120;
-    d.style.left = clampX(x, w / 2 + 10, WW - w / 2 - 10) + 'px';
+    d.style.left = clampX(x, w * .55 + 14, WW - w * .55 - 14) + 'px';    // 弾む時の 1.1 倍でも盤の端で切れない
     setTimeout(() => d.remove(), 850);
   }
   function stamp(text, sub, lose){
@@ -1604,6 +2372,22 @@
     return el;
   }
   const inkStamp = (head, sub) => { const el = inkShow(head, sub); return sleep(900).then(() => el.remove()); };
+  // v10: 物言い（1 秒）: 墨の大字と、行司の軍配がこちら向きから相手向き（またはその逆）にひっくり返る
+  const GUNBAI = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 6c21 0 33 15 33 33 0 15-10 26-21 29l-3 12H41l-3-12C27 65 17 54 17 39 17 21 29 6 50 6z" fill="#1d1a17"/>
+    <path d="M50 16c14 0 22 10 22 23S64 60 50 60 28 52 28 39s8-23 22-23z" fill="#a07b24"/><circle cx="50" cy="39" r="8" fill="#b3302a"/><rect x="46" y="80" width="8" height="18" fill="#6b5038"/></svg>`;
+  function monoii(){
+    sfx('stamp');
+    const el = document.createElement('div'); el.className = 'mono';
+    el.innerHTML = `${GUNBAI}<b>物言い</b>`;
+    $('fx').appendChild(el);
+    return sleep(DEMO ? 750 : 1000).then(() => el.remove());
+  }
+  // v10: 秘術の一瞬（字は出さない）: 自分の力士から金と藍の光が広がって消える
+  function psyFx(){
+    const el = document.createElement('div'); el.className = 'psyfx';
+    el.style.setProperty('--px', ((place.xp || MID) / WW * 100).toFixed(0) + '%');
+    $('fx').appendChild(el); setTimeout(() => el.remove(), 720);
+  }
   // v7: 教え・癖・型・異名が効いた瞬間だけ、力士の横に縦の短冊 0.6 秒（自分は左・相手の札は右）
   // 力士が動き終わってから（0.2 秒後）、自分の札は体の左、相手の札は体の右に並べる
   function flashTags(ev){
@@ -1635,7 +2419,7 @@
   function kimStamp(id, first){
     const k = KIMS[id];
     sfx('stamp');
-    const el = document.createElement('div'); el.className = 'kim r' + k.r + (k.n.length >= 6 ? ' xl' : k.n.length >= 5 ? ' long' : '');
+    const el = document.createElement('div'); el.className = 'kim r' + k.r + (k.n.length >= 6 ? ' xl' : k.n.length >= 5 ? ' long' : '') + (k.sp === 'kin' ? ' sk' : k.sp === 'hi' ? ' sh' : '');
     el.innerHTML = `<div class="kn">${k.n}${first ? '<i>初</i>' : ''}</div><small>${k.p}</small>`;
     $('fx').appendChild(el);
     return new Promise(res => {
@@ -1671,18 +2455,27 @@
       <h4>自分の型<small>同じ2手の流れで${KATA_NEED}勝すると型・${S.kata.length} / ${KATA_MAX}</small></h4>${kt}${near}${!kt && !near ? row('<b>まだ無い</b>', '勝った番の最後の2手を覚えていく', '<i></i>', ' no') : ''}
       <h4>異名<small>名乗れるのは1つ・付け替えは場所の間</small></h4>${im}</div>`;
   }
+  // v10: 帳の 4 枚目（品格と気の 1 行・禁じ手 6 手・秘術 6 手。まだの手は ？ と出し方の手がかり）
+  function spHtml(){
+    const cell = id => { const k = KIMS[id], c = book[id] || 0;
+      return c ? `<div class="got s${k.sp === 'kin' ? 'k' : 'h'}"><b${k.n.length >= 6 ? ' style="font-size:14px"' : ''}>${k.n}</b><span class="c num">${c}回</span></div>` : `<div class="no"><b>？</b><span>${k.h}</span></div>`; };
+    const grp = (sp, t) => `<div class="cat c${sp === 'kin' ? 'k' : 'h'}">${t}</div>` + SPK_IDS.filter(id => KIMS[id].sp === sp).map(cell).join('');
+    return `<div class="sphd"><span>品格<b class="num${S.hin < HIN_YOKO ? ' bad' : ''}">${S.hin}</b></span><span>気<b class="num">${S.ki || 0}/${kiCap(S)}</b></span><span>物言い<b class="num">${S.car.fl || 0}</b></span></div>
+      <div class="kgrid">${grp('kin', '禁じ手（見つかると反則負け・横綱には品格60）')}${grp('hi', '秘術（気を使う・山ごもりで覚える）')}</div>`;
+  }
   function openBook(tab){
-    tab = tab === 1 ? 1 : 0;
-    const n = bookCount();
+    tab = [1, 2, 3].includes(tab) ? tab : 0;
+    const n = bookCount(), ns = SPK_IDS.filter(k => book[k]).length;
     $('booksheet').innerHTML = `
       <div class="sh-h"><h3>帳</h3></div>
-      <div class="tabs"><button data-t="0" class="${tab ? '' : 'on'}">決まり手<small class="num">${n}/${KIM_IDS.length}</small></button><button data-t="1" class="${tab ? 'on' : ''}">教えと型</button></div>
-      ${tab ? v7Html() : `<div class="kgrid">${KIM_CAT.map((cat, ci) => { const ids = KIM_IDS.filter(id => KIMS[id].c === ci);
+      <div class="tabs">${['決まり手', '教えと型', '名鑑', '禁じ手と秘術'].map((t, i) => `<button data-t="${i}" class="${tab === i ? 'on' : ''}">${t}${i === 0 ? `<small class="num">${n}/${KIM_IDS.length}</small>` : i === 3 ? `<small class="num">${ns}/${SPK_IDS.length}</small>` : ''}</button>`).join('')}</div>
+      ${tab === 3 ? spHtml() : tab === 2 ? meikanHtml() : tab ? v7Html() : `<div class="kgrid">${KIM_CAT.map((cat, ci) => { const ids = KIM_IDS.filter(id => KIMS[id].c === ci);
         return `<div class="cat">${cat}</div>` + ids.map(id => {
         const k = KIMS[id], c = book[id] || 0;
         return c ? `<div class="got r${k.r}">${k.r >= 2 ? '<em>珍</em>' : ''}<b>${k.n}</b><span class="c num">${c}回</span></div>`
                  : `<div class="no"><b>？</b><span>${k.h}</span></div>`;
       }).join('') + '<div></div>'.repeat((3 - ids.length % 3) % 3); }).join('')}</div>`}
+      ${CHAL || busy ? '' : `<button class="share" id="toGate">入口へ${S.dly && B && B.ex > 0 && !B.over ? '（この一番は負け）' : ''}</button>`}
       <button class="go" id="bookClose">閉じる</button>`;
     $('booksheet').querySelectorAll('.tabs button').forEach(b => b.onclick = () => openBook(+b.dataset.t));
     $('booksheet').querySelectorAll('[data-drop]').forEach(b => b.onclick = () => {
@@ -1690,6 +2483,11 @@
       dropKata(S, +b.dataset.drop); saveGame(); openBook(1); refreshEnd();
     });
     $('booksheet').querySelectorAll('[data-im]').forEach(b => b.onclick = () => { S.imei = b.dataset.im; saveGame(); openBook(1); refreshEnd(); });
+    $('booksheet').querySelectorAll('[data-ke]').forEach(b => b.onclick = () => { REC.wear = b.dataset.ke; recSave(); sfx('stamp'); openBook(2); });
+    if ($('toGate')) $('toGate').onclick = () => { $('bookm').classList.remove('show'); openGate(); };
+    $('booksheet').querySelectorAll('[data-mi]').forEach(b => b.onclick = () => {
+      const k = b.dataset.mi; openCard(k === 'cur' ? meikanHtml.cur : meikanHtml.list[+k], k === 'cur' ? 'cur' : 'own');
+    });
     $('booksheet').scrollTop = 0;
     $('bookClose').onclick = () => $('bookm').classList.remove('show');
     $('bookm').classList.add('show');
@@ -1709,16 +2507,18 @@
     const ok = B.hand.filter(c => usable(c, x));
     B.hand.forEach(c => {
       const b = document.createElement('button');
-      b.className = 'card' + (sel === c ? ' sel' : ''); b.dataset.c = c;
+      const sp = CARDS[c].sp;
+      b.className = 'card' + (sp ? ' ' + sp : '') + (sel === c ? ' sel' : ''); b.dataset.c = c;
       const can = usable(c, x), cost = costOf(c, S, B);
-      const ap = c === 'brace' ? '' : APT[aptOf(c, S.A)].t;
-      const pips = cost ? Array.from({length:cost}, () => '<i></i>').join('') : (c === 'brace' && !B.heal ? '+1' : '');
+      const ap = c === 'brace' || sp ? '' : APT[aptOf(c, S.A)].t;     // v10: 禁じ手と秘術は適性を出さない（見つかる率と気が読みどころ）
+      const pips = (cost ? Array.from({length:cost}, () => '<i></i>').join('') : (c === 'brace' && !B.heal ? '+1' : '')) +
+        (sp === 'hi' ? Array.from({length:CARDS[c].ki}, () => '<b></b>').join('') : '');
       const kk = kataOf(S, B.last, c), kLive = kataLive(kk, x.o);       // 型の 2 手目: 角に朱の「型」（研究されていれば消し線）
       b.innerHTML = (ap ? `<span class="ap${ap === 'A' ? ' a' : ''}">${ap}</span>` : '') + (kk ? `<span class="km${kLive ? '' : ' st'}">型</span>` : '') + `<span class="ct${ctClass(CARDS[c].t)}">${CARDS[c].t}</span>` +
         (!can ? `<span class="why">${whyNot(c, x)}</span>` : sel === c && lastPT !== 'mouse' ? '<span class="again">もう一度で決める</span>' : `<span class="pp">${pips}</span>`);
       b.disabled = !can;
       let lp = null, held = false;
-      b.addEventListener('pointerdown', () => { held = false; lp = setTimeout(() => { held = true; info(`<b>${CARDS[c].s}</b>${TIP[c]}${ap ? `　適性 ${ap}` : ''}${kk ? `<br>型「${kataName(kk)}」の2手目${kLive ? `：+${KATA_RATE}%・${KATA_D}マス伸びる` : '：研究されている'}` : ''}`); }, 420); });
+      b.addEventListener('pointerdown', () => { held = false; lp = setTimeout(() => { held = true; info(`<b>${CARDS[c].s}</b>${TIP[c]}${ap ? `　適性 ${ap}` : ''}${sp === 'kin' ? `　見つかる率 ${foulRate(c, S)}%` : ''}${kk ? `<br>型「${kataName(kk)}」の2手目${kLive ? `：+${KATA_RATE}%・${KATA_D}マス伸びる` : '：研究されている'}` : ''}`); }, 420); });
       const up = () => { clearTimeout(lp); if (held) setTimeout(() => info(null), 900); };
       b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up);
       b.addEventListener('contextmenu', e => e.preventDefault());   // 長押しで iOS の選択・メニューを出さない
@@ -1748,7 +2548,8 @@
     if (!B || B.over) return;
     const o = curOpp();
     info(B.vis.map(m => `<b>${OPPM[m].t(B)}</b>`).join(' / ') + `　${KATA[o.style].t}${SIZE[o.size].t ? '・' + SIZE[o.size].t + '柄' : ''}` +
-      (B.study ? `<br>研: 型「${kataName(B.study.k)}」を研究して、${CARDS[B.study.k.a].t}への返しを構えている` : ''));
+      (B.study ? `<br>研: 型「${kataName(B.study.k)}」を研究して、${CARDS[B.study.k.a].t}への返しを構えている` : '') +
+      (B.ofoul ? '<br>反: 反則まがいで2マス強い。見つかれば こちらの反則勝ち' : B.opsy ? `<br>念: 念力。こちらの技の決まる率−${OPSY_RATE}%` : ''));
     clearTimeout(info.h); info.h = setTimeout(() => info(null), 1800);
   });
 
@@ -1781,6 +2582,11 @@
     if (busy) return;
     busy = true; sel = null; view.preview = null; ghosts(); info(null);
     const res = play(S, B, card, rnd);
+    if (S.dly && S.dly.mid !== S.day){ S.dly.mid = S.day; saveGame(); }   // v9: 今日の場所は取り直しなし＝途中で閉じた番は負けに数える
+    if (res.look){                                                  // v10: 千里眼は手番を使わない＝相手の本当の手だけが出る
+      sfx('stamp'); psyFx(); renderHUD(); renderHand(); drawStage();
+      busy = false; renderIntent(); coach(); return;
+    }
     renderHand(); renderIntent(); drawStage();
     $('hand').querySelectorAll('button').forEach(b => b.disabled = true);
     const sp = DEMO ? .7 : 1;
@@ -1789,6 +2595,7 @@
     setPose(meP, (res.m === 'charge' || res.m === 'yori' || res.m === 'throw' || res.m === 'grab') ? 'push' : 'stand');
     // ぶつかる（寄り合って少し傾く）
     sfx('hit');
+    if (res.psy) psyFx();
     place({rP:9, rO:-9, dxP:14, dxO:-14});
     await sleep(140 * sp);
     view.c = res.to; view.g = res.g;
@@ -1823,16 +2630,30 @@
       await sleep(260 * sp);
     }
     document.querySelectorAll('.tag').forEach(t => t.style.opacity = 0);
-    if (win){ setPose(GRIPPY.includes(res.card) || B.g ? 'grip' : 'push', 'sad'); place({dxO:40, rO:FALL, rP:6}); }
-    else { setPose('sad', 'push'); place({dxP:-40, rP:-FALL, rO:-6}); }
-    $('shk').classList.remove('shake'); void $('shk').offsetWidth; $('shk').classList.add('shake');
-    sfx('sand');
-    await sleep(380 * sp);
+    const rule = B.over === 'foul' || B.over === 'fwin';             // v10: 物言い（反則負け・反則勝ち）は倒れない。軍配がひっくり返る
+    if (rule){ await monoii(); setPose(win ? 'happy' : 'sad', win ? 'sad' : 'stand'); place(); }
+    else {
+      if (win){ setPose(GRIPPY.includes(res.card) || B.g ? 'grip' : 'push', 'sad'); place({dxO:40, rO:FALL, rP:6}); }
+      else { setPose('sad', 'push'); place({dxP:-40, rP:-FALL, rO:-6}); }
+      $('shk').classList.remove('shake'); void $('shk').offsetWidth; $('shk').classList.add('shake');
+      sfx('sand');
+      await sleep(380 * sp);
+    }
     const rev = win && B.minC <= -2;
-    if (win && res.kim){
-      const first = addBook(res.kim);
+    if (B.over === 'foul') stamp('反則負け', CARDS[res.card].t, true);
+    else if (B.over === 'fwin') stamp('反則勝ち', '相手の反則');
+    else if (win && res.kim){
+      const first = CHAL ? false : addBook(res.kim);
       await kimStamp(res.kim, first);
     } else stamp(win ? '勝ち' : '負け', timed ? '押し切られた' : '押し出され', !win);
+    if (CHAL){                                      // 名鑑の一番: 記録も保存もしない
+      if (win) setPose('happy');
+      say(win ? '勝ちました！' : 'くやしい…');
+      await sleep(1100);
+      view = {c:0, g:0, preview:null}; setPose('stand', 'stand'); place();
+      document.querySelectorAll('.tag').forEach(t => t.style.opacity = '');
+      chalEnd(win); return;
+    }
     // v7: 勝ち方の履歴（異名）と最後の 2 手の流れ（型）。型ができた瞬間は墨の大字
     const kc = DEMO ? (win && S.day === 6 ? 1 : 0) : kaiganChance(S, B, o, win);
     if (win){
@@ -1850,11 +2671,12 @@
       else if (a){ S.A[a]++; await inkStamp('開眼', `${ABIL[a].t} +1`); }
     }
     endDay(S, win, res.kim);
+    if (S.dly) S.dly.mid = -1;
     S.phase = phaseAfter(S);
     saveGame();
     signal('play');                                 // 遊んだ＝1 番目を取り終えた（各 1 回・送らない条件では呼んでも何もしない）
     if (win) setPose('happy');
-    say(win ? (rev ? '返しました！' : '勝ちました！') : (B.over === 'tlose' ? '攻めきれなかった…' : 'くやしい…'));
+    say(B.over === 'foul' ? '見られていた…' : B.over === 'fwin' ? '助かった…' : win ? (rev ? '返しました！' : '勝ちました！') : (B.over === 'tlose' ? '攻めきれなかった…' : 'くやしい…'));
     if (wins() === 8 && win) setTimeout(() => stamp('勝ち越し'), DEMO ? 250 : 450);
     renderHUD();
     await sleep(win && res.kim ? (DEMO ? 250 : 800) : (DEMO ? 420 : 1200));
@@ -1890,8 +2712,11 @@
     B.hand.unshift(c);                                  // 上の段の左（指さしが下の札に重ならない）
   }
   function startDay(){
+    if (!S.nm && !DEMO && !CHAL){ openName(); return; }     // v8: 最初の場所の始めに四股名を選ぶ
     S.phase = 'bout'; saveGame();
+    rnd = S.dly && !DEMO ? boutRnd(S) : RND0;
     B = newBout(S, rnd);
+    preOpp(curOpp());
     nextExchange();
   }
 
@@ -1912,7 +2737,8 @@
     <path d="M13.6 25.5c-2 0-2.6 4.6.4 5.2M40.4 25.5c2 0 2.6 4.6-.4 5.2"/>
     <path d="M5 54c1.6-7 8.6-11.6 22-11.6S47.4 47 49 54M20 42.8l7 11.2 7-11.2"/></svg>`;
   const oyaHtml = o => `<div class="oya">${OYA_FACE}<div><b>「${OSHIE[o.id].t}」</b><span>${OSHIE[o.id].e}${o.cured ? `　<em>${KUSE[o.cured].t}が直った</em>` : ''}</span></div></div>`;
-  const osRow = () => `<button class="osr" id="osr"><span>教え<b class="num">${S.oshie.length}</b></span>${S.kuse ? `<span>癖<b class="bad">${KUSE[S.kuse].t}</b></span>` : ''}<span>型<b class="num">${S.kata.length}</b></span><span class="go2">帳を開く</span></button>`;
+  const osRow = () => `<button class="osr" id="osr"><span>教え<b class="num">${S.oshie.length}</b></span>${S.kuse ? `<span>癖<b class="bad">${KUSE[S.kuse].t}</b></span>` : ''}<span>型<b class="num">${S.kata.length}</b></span>` +
+    `<span>品格<b class="num${S.hin < HIN_YOKO ? ' bad' : ''}">${S.hin}</b></span><span class="go2">帳</span></button>`;   // v10: 品格（見えるのは稽古の紙と名鑑の札だけ）
   // 長押し（と能力の行のタップ）で、下の 1 行に普通の言葉を出す
   function holdTip(el, text){
     let t = null; el.dataset.held = '';
@@ -1923,14 +2749,19 @@
   }
   function openGrow(){
     S.phase = 'grow'; saveGame();
-    const kotsu = DEMO ? ['teppo'] : kotsuNight(S, rnd);
-    const mark = DEMO ? {k:'teppo', id:'mae'} : oshieNight(S, rnd);   // 教えの印（親方の一言がもらえる稽古）
-    const st = {hard:false, picks:[], up:[], log:'', cand:null, done:false, oya:null};
+    const nr = nightRnd(S);                                            // v9: 今日の場所は夜の印も日付の種から（全員同じ）
+    const kotsu = DEMO ? ['teppo'] : kotsuNight(S, nr);
+    const mark = DEMO ? {k:'teppo', id:'mae'} : oshieNight(S, nr);   // 教えの印（親方の一言がもらえる稽古）
+    const spn = DEMO ? null : PEEK_SP || spNight(S);                   // v10: まれな晩の 1 本（裏稽古は稽古に足せる・山ごもりはその晩それだけ）
+    const st = {hard:false, picks:[], up:[], log:'', cand:null, done:false, oya:null, sp:false};
     const sheet = $('sheet');
     const need = () => st.hard ? 2 : 1;
+    const spDis = () => st.sp || st.cand || !canSp(S, spn) || (spn === 'yama' && (st.picks.length || st.hard || st.done));
+    const spBtn = () => !spn ? '' : `<button class="spk ${spn}" id="spk" ${spDis() ? 'disabled' : ''}><span class="sm">${spn === 'ura' ? '裏' : '山'}</span><b>${SPK[spn].t}</b>` +
+      `<small>${spn === 'ura' ? '禁じ手' : '秘術と気'}</small><span class="rk2">${pipsN(-SPK[spn].st)}<span class="rs">${spInj(S, spn)}%</span></span></button>`;
     const draw = () => {
       sheet.innerHTML = `
-        <div class="sh-h"><h3>稽古</h3><span class="k">${S.day}日目の夜</span>${kataHead()}</div>
+        <div class="sh-h"><h3>稽古</h3><span class="k">${S.day}日目の夜</span>${kataHead()}${kakuTag()}</div>
         ${stBar()}
         ${abRows(st.up)}
         ${osRow()}
@@ -1939,18 +2770,21 @@
           const dis = st.done || st.cand || st.picks.includes(k) || !canKeiko(S, k) || (K.calm && st.hard);
           const upT = K.calm ? `体力+${K.st}` : Object.keys(K.up).map(a => `${ABIL[a].t}+1`).join('') + (K.maxUp ? '<br>上限+1' : '');
           return `<button data-k="${k}" class="${st.picks.includes(k) ? 'on' : ''}" ${dis ? 'disabled' : ''}>${mark && mark.k === k && !st.oya ? '<span class="osm">教</span>' : ''}${kotsu.includes(k) ? '<span class="kotsu">コツ</span>' : ''}<b>${K.t}</b><em>${upT}</em>` +
-            `<span class="rk2">${K.st < 0 ? pipsN(-K.st) : ''}${ir ? `<span class="rs">${ir}%</span>` : ''}</span></button>`;
+            `<span class="rk2">${K.st < 0 ? pipsN(-K.st) : ''}${ir ? `<span class="rs">${S.injured ? '大' : ''}${ir}%</span>` : ''}</span></button>`;
         }).join('')}</div>
-        <button class="hard ${st.hard ? 'on' : ''}" id="hard" ${st.picks.length || st.done ? 'disabled' : ''}><b>激しく</b><small>2つ選ぶ</small><span class="risk">けが+${INJ_HARD}%</span></button>
+        <button class="hard ${st.hard ? 'on' : ''}" id="hard" ${st.picks.length || st.done || st.sp ? 'disabled' : ''}><b>激しく</b><small>2つ選ぶ</small><span class="risk">けが+${INJ_HARD}%</span></button>
+        ${spBtn()}
         ${st.oya ? oyaHtml(st.oya) : ''}
-        <div class="glist" id="glist">${st.cand ? `<button data-l="${st.cand}"><span class="nw">コツ</span><b>${CARDS[st.cand].t}</b><span class="pp">${pipsN(CARDS[st.cand].cost)}</span><span class="ap">${APT[aptOf(st.cand, S.A)].t}</span></button><button class="skip" data-skip="1"><b>見送る</b></button>` : ''}</div>
+        <div class="glist" id="glist">${st.cand ? `<button data-l="${st.cand}"><span class="nw">${CARDS[st.cand].sp === 'kin' ? '裏' : CARDS[st.cand].sp === 'hi' ? '秘' : 'コツ'}</span><b>${CARDS[st.cand].t}</b><span class="pp">${pipsN(CARDS[st.cand].cost)}</span>${CARDS[st.cand].sp ? '' : `<span class="ap">${APT[aptOf(st.cand, S.A)].t}</span>`}</button><button class="skip" data-skip="1"><b>見送る</b></button>` : ''}</div>
         <div class="glog" id="glog">${st.log}</div>
         <button class="go" id="gdone" ${st.done ? '' : 'disabled'}>${S.day + 1}日目へ</button>`;
       sheet.querySelector('#hard').onclick = () => { st.hard = !st.hard; draw(); };
+      const sb = sheet.querySelector('#spk');
+      if (sb){ holdTip(sb, `${SPK[spn].t}: ${SPK[spn].tip}${spn === 'ura' ? '。使うたび品格が下がる' : '。その晩はこれだけ'}`); sb.onclick = () => { if (sb.dataset.held){ sb.dataset.held = ''; return; } doSp(); }; }
       sheet.querySelectorAll('.abl div').forEach(el => el.onclick = () => { $('glog').innerHTML = `<span class="tip">${ABIL[el.dataset.a].t}: ${ABIL[el.dataset.a].tip}</span>`; });
       sheet.querySelectorAll('.gopts button').forEach(b => {
         const K = KEIKO[b.dataset.k];
-        holdTip(b, `${K.t}: ${K.tip}${mark && mark.k === b.dataset.k && !st.oya ? '。「教」は親方の教えがもらえる' : ''}`);
+        holdTip(b, `${K.t}: ${K.tip}${mark && mark.k === b.dataset.k && !st.oya ? '。「教」は親方の教えがもらえる' : ''}${S.injured && K.inj >= 0 && !K.calm ? '。「大」＝もう一度けがをすると大けが（場所のあと引退）' : ''}`);
         b.onclick = () => { if (b.dataset.held){ b.dataset.held = ''; return; } pick(b.dataset.k); };
       });
       const cb = sheet.querySelector('[data-l]');
@@ -1961,7 +2795,18 @@
       const done = $('gdone');
       done.onclick = () => { $('modal').classList.remove('show'); S.phase = 'bout'; renderHUD(); startDay(); };
     };
-    const settle = () => { if (!st.cand && st.picks.length >= need()) st.done = true; if (st.done) saveGame(); draw(); };
+    const settle = () => { st.done = !st.cand && (st.picks.length >= need() || !!st.yama); if (st.done) saveGame(); draw(); };
+    // v10: 裏稽古・山ごもり（候補の札は「覚える／見送る」で、ふつうのコツと同じ欄に出す）
+    const doSp = () => {
+      st.sp = true;
+      const out = doSpKeiko(S, spn, rnd);
+      sfx('hit'); if (spn === 'yama') st.yama = true;
+      const parts = [out.ki ? `気の上限${kiCap(S)}` : '', out.up ? `${ABIL[out.up].t}+1` : ''].filter(Boolean);
+      st.log = (st.log ? st.log + '<br>' : '') + `${SPK[spn].t}: ${parts.join(' ') || '—'}` +
+        (out.hurt ? `<br><span class="bad">${S.hurtN >= 2 ? '大けが: この場所のあと引退' : `けが: 「${CARDS[out.hurt].t}」がこの場所で使えない`}</span>` : '');
+      if (out.cand) st.cand = out.cand;
+      renderHUD(); settle();
+    };
     const pick = k => {
       const K = KEIKO[k];
       st.picks.push(k);
@@ -1970,7 +2815,7 @@
       sfx('hit');
       if (mark && mark.k === k && !st.oya){ st.oya = {id:mark.id, cured:giveOshie(S, mark.id)}; setTimeout(() => sfx('stamp'), 160); }
       const parts = out.up.map(a => `${ABIL[a].t}+1`).concat(out.max ? ['上限+1'] : [], K.calm ? [`体力+${K.st}`] : []);
-      st.log = (st.log ? st.log + '<br>' : '') + `${K.t}: ${parts.join(' ') || '伸びしろなし'}` + (out.hurt ? `<br><span class="bad">けが: 「${CARDS[out.hurt].t}」がこの場所で使えない</span>` : '');
+      st.log = (st.log ? st.log + '<br>' : '') + `${K.t}: ${parts.join(' ') || '伸びしろなし'}` + (out.hurt ? `<br><span class="bad">${S.hurtN >= 2 ? '大けが: この場所のあと引退' : `けが: 「${CARDS[out.hurt].t}」がこの場所で使えない`}</span>` : '');
       if (kotsu.includes(k)){
         const kc = kotsuCard(S, k);
         if (kc.ok) st.cand = kc.ok;
@@ -2023,31 +2868,114 @@
     return e.k === 'study' ? `型「${kataName(e)}」が研究された` : e.k === 'imei' ? `異名「${IMEI[e.id].t}」が付いた` : e.k === 'kata' ? `型「${kataName(e)}」ができた`
       : e.k === 'cure' ? `${KUSE[e.id].t}が直った` : `教え「${OSHIE[e.id].t}」`;
   }
-  function endBasho(){
+  // v8: 格の札（稽古の紙の右上・1 語）
+  const kakuTag = () => S.dly ? '' : `<span class="kk">ランク<b>${KAKU[kakuOf(rateRikishi(S))].t}</b></span>`;   // 今日の場所では出さない（点の物差しが別）
+  // 場所の判定の 1 行: 優勝・決定戦・三賞・角番（無ければ「優勝の線 13勝」）
+  function jLine(J){
+    const a = [];
+    if (J.yu) a.push(`<b>${J.po ? '決定戦を制して' : ''}優勝</b>`);
+    else if (J.po === false) a.push('決定戦で敗れた');
+    J.sa.forEach(k => a.push(`<b>${SANSHO[k]}</b>`));
+    if (J.to === 7 && J.from === 6) a.push('<b>横綱に昇進</b>');
+    else if (J.to === 6 && J.from < 6) a.push('<b>大関に昇進</b>');
+    if (J.hinNo) a.push(`<b>品格が足りず横綱は見送り</b>（${HIN_YOKO}から）`);
+    if (J.kado) a.push('次は角番');
+    if (J.down) a.push('大関から落ちた');
+    if (!a.length && J.from >= 2) a.push(`優勝の線 ${J.line}勝`);
+    if (J.from >= 4 && J.from <= 5 && J.to < 6){                     // 大関への道のり: 三役で続いた場所の勝ち星（3 場所まで）
+      const h = []; for (let i = S.life.hist.length - 1; i >= 0 && h.length < 3 && S.life.hist[i][0] >= 4 && S.life.hist[i][0] <= 5; i--) h.push(S.life.hist[i][1]);
+      a.push(`三役${h.length}場所で${h.reduce((s, x) => s + x, 0)}勝（大関は3場所で${OZEKI_NEED}）`);
+    }
+    return a.join('　');
+  }
+  // v9: 今日の場所の紙（星・今日のランクの数え上げ・点の内訳・化粧廻し・次の目標・共有）
+  function endDaily(){
     S.phase = 'end';
-    closeBasho(S);
-    const w = wins(), l = 15 - w, from = S.rank, to = moveRank(S.rank, w);
+    const J = closeDaily(S), key = S.dly.key, w = J.w;
+    const res = S.res.map(x => x ? '○' : '●').join('');
+    const got = [...new Set(S.km.filter(k => k && KIMS[k]))];
+    const rare = got.slice().sort((a, b) => KIMS[b].r - KIMS[a].r)[0] || '';
+    if (!J.v9){                                       // 1 回だけ（紙を開き直しても数え直さない）
+      J.v9 = 1;
+      J.st = streakDone(key);
+      J.ke = keshoGive([w >= 8 && 'nami', J.yu && 'inazuma', J.st >= 3 && 'kumo', bookCount() >= KE_BOOK && 'uroko'].filter(Boolean));
+      J.best0 = REC.dBest ? REC.dBest.pts : -1;
+      if (J.pts > J.best0){ REC.dBest = {pts:J.pts, key}; recSave(); }
+      dailyDone(key, {w, pts:J.pts, rk:J.rk, res, kim:rare});
+      S.dly.over = 1;
+      signal('done');
+    }
+    const best = J.best0 >= 0 && J.pts > J.best0;
+    $('sheet').innerHTML = `
+      <div class="sh-h"><span class="k">今日の場所 ${mdOf(key)}・${nmStr(S.nm)}</span><span class="k" style="margin-left:auto">${J.st}日続けて</span></div>
+      <h2 class="num"><span id="cw">0</span>勝${15 - w}敗</h2>
+      <div class="kbig"><div class="kst" id="dlet">F</div><div><span class="kcap">今日のランク${best ? '<span class="newrec">自己ベスト</span>' : ''}</span><span class="num" id="rsc">0</span><small>点</small>
+        <div class="klad">${DRANK.map(x => `<i>${x.t}</i>`).join('')}</div></div></div>
+      <div class="ptl">白星<b class="num">${J.parts.w}</b>技${J.kinds}種<b class="num">${J.parts.kind}</b>格上<b class="num">${J.parts.top}</b>${J.yu ? `${J.po ? '決定戦で' : ''}優勝<b class="num">${J.parts.yu}</b>` : `優勝の線${J.line}勝`}</div>
+      <div class="shoshi">${S.res.map((x, i) => `<div><b>${x ? '○' : '●'}</b><small>${x && S.km[i] && KIMS[S.km[i]] ? KIMS[S.km[i]].ab : ''}</small></div>`).join('')}</div>
+      ${keNew(J.ke)}${nextHtml(S)}
+      <div id="wantBox">${sigMarks(ENV).want && !sigBlocked(ENV) ? '<div class="sent">届きました</div>' : '<button class="want" id="want">製品版で遊びたい</button>'}</div>
+      <div class="krow"><button class="share" id="share">星を共有</button><button class="kb" id="kb" aria-label="帳">帳</button></div>
+      <button class="go" id="next">入口へ</button>`;
+    const lad = [...document.querySelectorAll('#sheet .klad i')];
+    const show = v => {
+      const k = drankOf(v), L = $('dlet'), n = $('rsc'); if (!L || !n) return;
+      n.textContent = v;
+      if (L.textContent !== DRANK[k].t){ L.textContent = DRANK[k].t; L.style.animation = 'none'; void L.offsetWidth; L.style.animation = ''; if (k >= 3) sfx('stamp'); }
+      lad.forEach((e, i) => { e.className = i === k ? 'on' : i < k ? 'past' : ''; });
+    };
+    show(0);
+    setTimeout(() => anim(DEMO ? 650 : 1500, t => show(Math.round(J.pts * t))), DEMO ? 60 : 450);
+    anim(DEMO ? 300 : 900, t => { const c = $('cw'); if (c) c.textContent = Math.round(w * t); });
+    $('kb').onclick = () => openBook(0);
+    if ($('want')) $('want').onclick = () => { signal('want'); sfx('stamp'); $('wantBox').innerHTML = '<div class="sent">届きました</div>'; };
+    $('share').onclick = () => shareDaily(key, w, J.rk, res, rare);
+    $('next').onclick = () => openGate();
+    $('modal').classList.add('show');
+    setPose(w >= 8 ? 'happy' : 'sad');
+    renderHUD();
+  }
+  function shareDaily(key, w, rk, res, rare){
+    shareOut(`${GAME_NAME} 今日の場所 ${mdOf(key)}\n${res}\n${w}勝${15 - w}敗・ランク${DRANK[rk].t}${rare && KIMS[rare] && KIMS[rare].r >= 1 ? '・' + KIMS[rare].n : ''}`, shareUrl());
+  }
+  function endBasho(){
+    if (S.dly) return endDaily();
+    S.phase = 'end';
+    const J = closeLife(S, rnd);
+    if (!J.v9){                                       // v9: 記録と化粧廻し（同じ判定で開き直しても 1 回だけ）
+      J.v9 = 1;
+      REC.hi = Math.max(REC.hi, J.to); if (J.to === 7 && J.from === 6) REC.yk++;
+      recSave();
+      J.ke = keshoGive([J.w >= 8 && 'nami', J.to >= 4 && 'matsu', J.to === 7 && 'tsuna', bookCount() >= KE_BOOK && 'uroko'].filter(Boolean));
+    }
+    if (DEMO && J.sc0 >= KAKU[kakuOf(J.sc)].at) J.sc0 = KAKU[kakuOf(J.sc)].at - 31;   // 自動再生: 格が上がる瞬間を見せる
+    const w = wins(), l = 15 - w, from = J.from, to = J.to;
     const res = S.res.map(x => x ? '○' : '●').join('');
     const head = to > from ? '番付が上がった' : to < from ? '番付が下がった' : '番付はそのまま';
+    const k0 = kakuOf(J.sc0), k1 = kakuOf(J.sc), dsc = J.sc - J.sc0;
     $('sheet').innerHTML = `
-      <div class="k">千秋楽</div>
+      <div class="sh-h"><span class="k">千秋楽・${S.life.bn}場所目</span><span class="kk2${k1 > k0 ? ' up' : ''}" id="kk2">ランク<b id="kkn">${KAKU[k0].t}</b><span class="num" id="kks">${J.sc0}</span></span></div>
       <h2 class="num"><span id="cw">0</span>勝${l}敗</h2>
       <div class="lad">
         <div class="rungs">${RANKS.map((r, i) => i).reverse().map(i => `<div data-i="${i}" class="${i === from ? 'from' : ''}">${RANKS[i]}</div>`).join('')}</div>
         <div class="say2"><b class="${to < from ? 'down' : ''}">${head}</b><span>${RANKS[from]} → ${RANKS[to]}</span>
           <div class="abm">${AB_IDS.map(a => `<span>${ABIL[a].t}</span><i>${Array.from({length:AB_MAX}, (_, i) => `<u class="${i < S.A[a] ? 'on' : ''}"></u>`).join('')}</i>`).join('')}</div></div>
       </div>
+      ${jLine(J) ? `<div class="jl">${jLine(J)}</div>` : ''}
       <div id="imrBox">${imeiRow()}</div>
       ${note7() ? `<div class="note7">${note7()}</div>` : ''}
       <div class="shoshi">${S.res.map((x, i) => `<div><b>${x ? '○' : '●'}</b><small>${x && S.km[i] && KIMS[S.km[i]] ? KIMS[S.km[i]].ab : ''}</small></div>`).join('')}</div>
-      <div class="heya">
-        <div class="h">製品版で</div>
-        <ul><li>引退までの一生</li><li>癖が残る宿敵ノート</li><li>毎日 全員が同じ15番</li></ul>
-        <div id="wantBox">${sigMarks(ENV).want && !sigBlocked(ENV) ? '<div class="sent">届きました</div>' : '<button class="want" id="want">製品版で遊びたい</button>'}</div>
-      </div>
-      <div class="krow"><button class="share" id="share">星取表を共有</button><button class="kb num" id="kb">帳 ${bookCount()}/${KIM_IDS.length}</button></div>
-      <button class="go" id="next">次の場所へ</button>
+      ${keNew(J.ke || [])}${nextHtml(S)}
+      <div id="wantBox">${sigMarks(ENV).want && !sigBlocked(ENV) ? '<div class="sent">届きました</div>' : '<button class="want" id="want">製品版で遊びたい</button>'}</div>
+      <div class="krow"><button class="share" id="share">共有</button><button class="kb num" id="kb">帳 ${bookCount()}/${KIM_IDS.length}</button></div>
+      <button class="go" id="next">${J.retire ? '引退の紙へ' : '次の場所へ'}</button>
       <div class="disc">力士名は創作</div>`;
+    // 格の点を数え上げ、格が上がったら朱で押し直す
+    setTimeout(() => anim(DEMO ? 400 : 800, t => {
+      const s = $('kks'); if (!s) return;
+      const v = Math.round(J.sc0 + dsc * t); s.textContent = v;
+      const k = kakuOf(v), n = $('kkn'); if (n && n.textContent !== KAKU[k].t){ n.textContent = KAKU[k].t; if (k > k0){ $('kk2').classList.add('pop'); sfx('stamp'); } }
+    }), DEMO ? 120 : 500);
     $('kb').onclick = () => openBook(0);
     bindImr();
     if ($('want')) $('want').onclick = () => { signal('want'); sfx('stamp'); $('wantBox').innerHTML = '<div class="sent">届きました</div>'; };
@@ -2062,19 +2990,290 @@
       const got = [...new Set(S.km.filter(k => k && KIMS[k]))];
       const rare = got.slice().sort((a, b) => KIMS[b].r - KIMS[a].r)[0];
       const MON = ['睦月','如月','弥生','卯月','皐月','水無月','文月','葉月','長月','神無月','霜月','師走'];
-      const text = `${GAME_NAME} ${MON[new Date().getMonth()]}場所\n${res}\n${w}勝${l}敗${S.imei ? '・' + IMEI[S.imei].t : ''}・決まり手 ${got.length} 種` +
+      const text = `${GAME_NAME} ${MON[new Date().getMonth()]}場所\n${nmStr(S.nm)}（${RANKS[from]}）\n${res}\n${w}勝${l}敗${S.imei ? '・' + IMEI[S.imei].t : ''}・決まり手 ${got.length} 種` +
         (rare && KIMS[rare].r >= 2 ? `（${KIMS[rare].n}！）` : '');
-      const url = location.href.split('?')[0].split('#')[0];
-      if (navigator.share) navigator.share({text, url}).catch(() => {});
-      else window.open('https://x.com/intent/post?text=' + encodeURIComponent(text + '\n') + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+      shareOut(text, shareUrl());
     };
     $('next').onclick = () => {
+      if (J.retire){ openRetire(); return; }
       $('modal').classList.remove('show');
       S = newSeason({...carry(S), rank:to}, rnd);
       startDay();
     };
     setPose(w >= 8 ? 'happy' : 'sad');
     renderHUD();
+  }
+  // =====================================================================
+  // v8: 名鑑（端末に 30 枚）・札の文字列（#r=…・四股名の字の番号と数字だけ）・引退の紙・四股名・名鑑の一番
+  // =====================================================================
+  const MEIKAN_KEY = 'hakkeyoi.meikan.v1', MEIKAN_MAX = 30;
+  const CARD_IDS = Object.keys(CARDS), IM_IDS = Object.keys(IMEI), WHY_IDS = Object.keys(WHY);
+  const shareUrl = () => location.href.split('?')[0].split('#')[0];
+  function shareOut(text, url){
+    if (navigator.share) navigator.share({text, url}).catch(() => {});
+    else window.open('https://x.com/intent/post?text=' + encodeURIComponent(text + '\n') + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+  }
+  // いまの力士（または引退した力士）を札にする
+  function cardOf(S){
+    const L = S.life, hw = L.hist.reduce((s, h) => s + h[1], 0);
+    const cur_ = !S.J || S.J.mid, cw = cur_ ? S.res.filter(x => x).length : 0, cl = cur_ ? S.res.length - cw : 0;
+    const got = KIM_IDS.filter(k => S.car.kc[k]);
+    return {nm:S.nm || [0, 0], sc:rateRikishi(S), hi:L.hi, w:hw + cw, l:L.hist.length * 15 - hw + cl, bn:L.bn, A:{...S.A},
+      dk:S.deck.filter(c => CARDS[c].req), kata:S.kata.map(k => [k.a, k.b]), imei:S.imei || S.imeis[0] || null,
+      kimN:got.length, yu:L.yu, sa:L.sa, os:S.oshie.slice(), top:got.sort((a, b) => S.car.kc[b] - S.car.kc[a])[0] || null, why:S.J && S.J.retire || null,
+      ke:REC.wear || null,                         // v9: 締めている化粧廻し（札・共有の札・引退の紙に出る）
+      hin:S.hin == null ? HIN_START : S.hin, sk:S.deck.filter(isSp)};   // v10: 品格と、覚えた禁じ手・秘術
+  }
+  const bits = (list, ids) => ids.reduce((m, id, i) => m | (list.includes(id) ? 1 << i : 0), 0);
+  function encCard(c){
+    const kt = c.kata.map(([a, b]) => CARD_IDS.indexOf(a).toString(16) + CARD_IDS.indexOf(b).toString(16)).join('') || '-';
+    const opt = (v, ids, base = 10) => v ? ids.indexOf(v).toString(base) : '-';
+    return ['3', c.nm[0], c.nm[1], c.sc, c.hi, c.w, c.l, c.bn, AB_IDS.map(a => c.A[a]).join(''), bits(c.dk, LEARN).toString(36), kt,
+      opt(c.imei, IM_IDS, 36), c.kimN, c.yu, c.sa, bits(c.os, OS_IDS).toString(36), opt(c.top, KIM_IDS, 36), opt(c.why, WHY_IDS), opt(c.ke, KE_IDS),
+      c.hin == null ? HIN_START : c.hin, bits(c.sk || [], SP_C).toString(36)].join('.');   // v10: 版 3（品格・禁じ手と秘術。異名は 8 つになったので 36 進）
+  }
+  // 壊れた・形の違う文字列は null（「読めない札」）。数字は範囲で切る
+  function decCard(s){
+    try {
+      if (typeof s !== 'string' || s.length > 120 || !/^[0-9a-z.\-]+$/.test(s)) return null;
+      const f = s.split('.');
+      if (!((f.length === 18 && f[0] === '1') || (f.length === 19 && f[0] === '2') || (f.length === 21 && f[0] === '3')) || !/^[1-5]{4}$/.test(f[8])) return null;   // v9: 版 2 は化粧廻しの柄つき／v10: 版 3 は品格と禁秘
+      const num = (v, lo, hi, base = 10) => { if (!(base === 36 ? /^[0-9a-z]{1,8}$/ : /^\d{1,8}$/).test(v)) throw 0; return Math.max(lo, Math.min(hi, parseInt(v, base))); };
+      const opt = (v, ids, base) => v === '-' ? null : ids[num(v, 0, ids.length - 1, base)];
+      const A = {}; AB_IDS.forEach((a, i) => { A[a] = +f[8][i]; });
+      const kata = [];
+      if (f[10] !== '-'){
+        if (!/^([0-9a-f]{2}){1,2}$/.test(f[10])) return null;
+        for (let i = 0; i < f[10].length; i += 2){ const a = CARD_IDS[parseInt(f[10][i], 16)], b = CARD_IDS[parseInt(f[10][i + 1], 16)]; if (!a || !b) return null; kata.push([a, b]); }
+      }
+      const dk = num(f[9], 0, (1 << LEARN.length) - 1, 36), os = num(f[15], 0, (1 << OS_IDS.length) - 1, 36);
+      const c = {nm:[num(f[1], 0, NM_A.length - 1), num(f[2], 0, NM_B.length - 1)], sc:num(f[3], 0, 999), hi:num(f[4], 0, 7),
+        w:num(f[5], 0, CAREER_MAX * 15), l:num(f[6], 0, CAREER_MAX * 15), bn:num(f[7], 0, CAREER_MAX), A,
+        dk:LEARN.filter((_, i) => dk & 1 << i), kata, imei:opt(f[11], IM_IDS, f[0] === '3' ? 36 : 10), kimN:num(f[12], 0, KIM_IDS.length), yu:num(f[13], 0, CAREER_MAX),
+        sa:num(f[14], 0, CAREER_MAX * 3), os:OS_IDS.filter((_, i) => os & 1 << i), top:opt(f[16], KIM_IDS, 36), why:opt(f[17], WHY_IDS), ke:f.length >= 19 ? opt(f[18], KE_IDS) : null,
+        hin:f.length === 21 ? num(f[19], 0, 100) : null, sk:f.length === 21 ? (sk => SP_C.filter((_, i) => sk & 1 << i))(num(f[20], 0, (1 << SP_C.length) - 1, 36)) : []};
+      if (!nmOk(c.nm)) c.nm = [0, 0];
+      return c;
+    } catch (e){ return null; }
+  }
+  let peekCards = null;                               // 撮影の覗き見のときだけ使う見本の札
+  function meikanLoad(){
+    if (peekCards) return peekCards;
+    try {
+      const a = JSON.parse(safeStore.getItem(MEIKAN_KEY) || '[]');
+      return Array.isArray(a) ? a.filter(x => x && typeof x.id === 'string' && decCard(x.c)).slice(0, MEIKAN_MAX) : [];
+    } catch (e){ return []; }
+  }
+  function meikanAdd(S){
+    if (!CAN_SAVE || CHAL) return;
+    let a = meikanLoad().filter(x => x.id !== S.rid);
+    a.unshift({id:S.rid, c:encCard(cardOf(S))});
+    if (a.length > MEIKAN_MAX) a = a.sort((p, q) => decCard(q.c).sc - decCard(p.c).sc).slice(0, MEIKAN_MAX);   // いっぱいなら格の低い札から外す
+    safeStore.setItem(MEIKAN_KEY, JSON.stringify(a));
+  }
+  const abDots = A => `<div class="abm">${AB_IDS.map(a => `<span>${ABIL[a].t}</span><i>${Array.from({length:AB_MAX}, (_, i) => `<u class="${i < A[a] ? 'on' : ''}"></u>`).join('')}</i>`).join('')}</div>`;
+  // 名鑑の札（番付の紙の 1 枚）
+  function cardHtml(c, head){
+    const rows = [
+      ['最高位', RANKS[c.hi] + (c.yu ? `・優勝${c.yu}` : '') + (c.sa ? `・三賞${c.sa}` : '')],
+      ['生涯', `${c.w}勝${c.l}敗・${c.bn}場所`],
+      ['得意', c.top ? KIMS[c.top].n : '—'],
+      c.imei && ['異名', IMEI[c.imei].t],
+      c.kata.length && ['型', c.kata.map(([a, b]) => kataName({a, b})).join('・')],
+      ['決まり手', `${c.kimN}種`],
+      c.os.length && ['教え', c.os.map(id => OSHIE[id].t).join('・')],
+      c.hin != null && ['品格', `${c.hin}${c.hin < HIN_YOKO ? '（横綱に届かない）' : ''}`],
+      c.sk && c.sk.length && ['禁じ手と秘術', c.sk.map(id => CARDS[id].t).join('・')],
+    ].filter(Boolean);
+    return `<div class="rc"><div class="rc-h"><div><div class="k">${head}</div><h2>${nmStr(c.nm)}</h2></div>
+      <div class="rc-k"><b>ランク ${KAKU[kakuOf(c.sc)].t}</b><span class="num">${c.sc}</span></div></div>
+      ${c.ke ? band(c.ke) : ''}${abDots(c.A)}<dl class="rc-d">${rows.map(([t, v]) => `<dt>${t}</dt><dd>${v}</dd>`).join('')}</dl></div>`;
+  }
+  // 札を開く（帳の上の紙）。from: 'cur' いまの力士 / 'own' 名鑑 / 'url' 共有で届いた札
+  function openCard(c, from){
+    const bs = $('booksheet');
+    if (!c){
+      bs.innerHTML = `<div class="sh-h"><h3>読めない札</h3></div><div class="glog"><span class="tip">札の文字列が壊れている</span></div><button class="go" id="cx">閉じる</button>`;
+      $('cx').onclick = () => { clearHash(); $('bookm').classList.remove('show'); };
+    } else {
+      const head = from === 'cur' ? 'いま育てている力士' : from === 'url' ? '届いた札' : c.why ? WHY[c.why] : '名鑑';
+      bs.innerHTML = cardHtml(c, head) + (from === 'url'
+        ? '<button class="go" id="cfight">この力士と取る</button><button class="share" id="cx">自分の場所へ</button>'
+        : '<div class="krow"><button class="share" id="cfight">この力士と取る</button><button class="kb" id="cshare">共有</button></div><button class="go" id="cx">名鑑へ戻る</button>' + (from === 'cur' && !S.dly ? '<button class="share quit" id="cquit">ここで引退する</button>' : ''));
+      $('cfight').onclick = () => startChallenge(c);
+      if ($('cquit')){                                  // 育成を途中でやめる: 2 回押しで確定（ブラウザの確認窓は使わない）。いまの札を名鑑に残し、引退の紙へ
+        let armed = false;
+        $('cquit').onclick = () => {
+          if (!armed){ armed = true; $('cquit').textContent = 'もう一度押すと引退（戻せません）'; $('cquit').classList.add('armed'); return; }
+          $('bookm').classList.remove('show');
+          S.J = S.J ? Object.assign(S.J, {retire:'self'}) : {retire:'self', mid:1};   // mid: 場所の途中でやめた＝この場所の星も札に数える
+          openRetire();
+        };
+      }
+      if ($('cshare')) $('cshare').onclick = () => shareOut(`${GAME_NAME}\n名鑑「${nmStr(c.nm)}」ランク${KAKU[kakuOf(c.sc)].t} ${c.sc}点\n最高位 ${RANKS[c.hi]}・${c.w}勝${c.l}敗`, shareUrl() + '#r=' + encCard(c));
+      $('cx').onclick = () => { if (from === 'url'){ clearHash(); $('bookm').classList.remove('show'); } else openBook(2); };
+    }
+    bs.scrollTop = 0;
+    $('bookm').classList.add('show');
+  }
+  const clearHash = () => { if (location.hash) try { history.replaceState(null, '', location.pathname + location.search); } catch (e){} };
+  function meikanHtml(){
+    const list = meikanLoad().map(x => decCard(x.c)).filter(Boolean).sort((a, b) => b.sc - a.sc);
+    meikanHtml.list = list;
+    const cur = S.nm && !CHAL && S.phase !== 'retire' ? cardOf(S) : null;
+    meikanHtml.cur = cur;
+    const row = (c, key) => `<button class="mrow" data-mi="${key}"><b>${nmStr(c.nm)}</b><span>${RANKS[c.hi]}・${c.w}勝${c.l}敗</span><em>${KAKU[kakuOf(c.sc)].t}</em><i class="num">${c.sc}</i></button>`;
+    // v9: 自己ベストの 1 行と、化粧廻し（もらった柄を押すと締める・まだの柄は条件）
+    const ke = KE_IDS.map(id => {
+      const got = REC.ke.includes(id), on = REC.wear === id;
+      return `<button class="ke-row${got ? '' : ' no'}${on ? ' on' : ''}" ${got ? `data-ke="${id}"` : 'disabled'}>${band(id, 64).replace('class="ksb"', 'class="ksb sm"')}<b>${got ? KESHO[id].t : '？'}</b><span>${got ? '' : KESHO[id].h}</span>${on ? '<i>締めている</i>' : ''}</button>`;
+    }).join('');
+    return `<div class="mk"><div class="grec">${recLine(true)}</div>${cur ? '<h4>いま</h4>' + row(cur, 'cur') : ''}<h4>引退<small class="num">${list.length} / ${MEIKAN_MAX}</small></h4>
+      ${list.map((c, i) => row(c, i)).join('') || '<div class="mno">引退すると札が残る</div>'}
+      <h4>化粧廻し<small class="num">${REC.ke.length} / ${KE_IDS.length}</small></h4>${ke}</div>`;
+  }
+  // 引退の紙: 格を大きく・生涯の星（場所ごとの番付の 1 字と勝ち星）・名鑑に残す
+  function openRetire(){
+    S.phase = 'retire';
+    meikanAdd(S); saveGame();
+    const c = cardOf(S), k = kakuOf(c.sc), J = S.J || {};
+    if (!J.r9){                                       // v9: 自己ベスト（新記録）と化粧廻し「菱」（1 回だけ）
+      J.r9 = 1;
+      J.nr = !REC.best || c.sc > REC.best.sc;
+      if (J.nr){ REC.best = {sc:c.sc, nm:c.nm, hi:c.hi}; recSave(); }
+      J.rke = keshoGive(k >= 5 ? ['hishi'] : []);
+      saveGame();
+    }
+    $('sheet').innerHTML = `
+      <div class="sh-h"><span class="k">引退・${c.bn}場所</span><span class="k" style="margin-left:auto">${WHY[J.retire] || ''}</span></div>
+      <h2>${nmStr(c.nm)}</h2>${c.ke ? band(c.ke) : ''}
+      <div class="kbig"><div class="kst">${KAKU[k].t}</div><div><span class="kcap">ランク${J.nr ? '<span class="newrec">新記録</span>' : ''}</span><span class="num" id="rsc">0</span><small>点</small>
+        <div class="klad">${KAKU.map((x, i) => `<i class="${i === k ? 'on' : i < k ? 'past' : ''}">${x.t}</i>`).join('')}</div></div></div>
+      <div class="jl">最高位 <b>${RANKS[c.hi]}</b>　${c.w}勝${c.l}敗${c.yu ? `　優勝${c.yu}` : ''}${c.sa ? `　三賞${c.sa}` : ''}</div>
+      <div class="life">${S.life.hist.map(([r, w]) => `<div class="${w >= 8 ? 'kk' : ''}${r >= 6 ? ' oz' : ''}"><b>${RK1[r]}</b><span class="num">${w}</span></div>`).join('')}</div>
+      ${abDots(c.A)}
+      ${keNew(J.rke || [])}${nextHtml(S, true)}
+      <div class="krow"><button class="share" id="rshare">札を共有</button><button class="kb" id="rmk">名鑑</button></div>
+      <button class="go" id="rnew">新しい力士を育てる</button>`;
+    anim(DEMO ? 500 : 1000, t => { const e = $('rsc'); if (e) e.textContent = Math.round(c.sc * t); });
+    $('rshare').onclick = () => shareOut(`${GAME_NAME}\n${nmStr(c.nm)} 引退　ランク${KAKU[k].t} ${c.sc}点\n最高位 ${RANKS[c.hi]}・${c.w}勝${c.l}敗`, shareUrl() + '#r=' + encCard(c));
+    $('rmk').onclick = () => openBook(2);
+    $('rnew').onclick = () => { $('modal').classList.remove('show'); S = newSeason({}, rnd); B = null; renderHUD(); startDay(); };
+    $('modal').classList.add('show');
+  }
+  // 四股名: 3 つの候補とおまかせ（用意した字の組み合わせだけ）
+  function openName(){
+    const c = []; for (let i = 0; i < 3; i++) c.push(nmPick(rnd, c.map(nmStr)));
+    $('sheet').innerHTML = `
+      <div class="sh-h"><h3>四股名を選ぶ</h3><span class="k">幕下から</span></div>
+      <div class="nmo">${c.map((nm, i) => `<button data-n="${i}"><b>${nmStr(nm)}</b></button>`).join('')}<button data-n="r" class="om"><b>おまかせ</b></button></div>
+      <div class="nmg">${CAREER_MAX}場所で引退。<br>勝ち星より、良い力士に育てる。</div>`;
+    $('sheet').querySelectorAll('[data-n]').forEach(b => b.onclick = () => {
+      S.nm = b.dataset.n === 'r' ? nmPick(rnd, c.map(nmStr)) : c[+b.dataset.n];
+      sfx('stamp'); $('modal').classList.remove('show'); renderHUD(); startDay();
+    });
+    $('modal').classList.add('show');
+  }
+  // 名鑑の一番: 札の力士（能力・覚えた技で取り口、型の手を構えやすい）と 1 番だけ。保存しない・帳に付けない
+  const C2M = {push:'charge', thrust:'charge', nodowa:'charge', grip:'grab', throw:'throw', shitate:'throw', kote:'throw', kake:'throw', uchari:'throw',
+    gabu:'yori', tsuri:'yori', dodge:'dodge', hataki:'dodge', otoshi:'dodge', ashi:'dodge', brace:'brace'};
+  function oppFromCard(c){
+    const cnt = {}; for (const k in KATA) cnt[k] = c.A[KATA[k].ab] * 2;
+    c.dk.forEach(id => { const k = CARDS[id].kata; if (k) cnt[k]++; });
+    const style = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+    const bias = {}; c.kata.forEach(f => f.forEach(x => { const m = C2M[x]; if (m) bias[m] = (bias[m] || 0) + 1.5; }));
+    const sk = c.sk || [], sp = sk.some(k => CARDS[k].sp === 'kin') ? 'kin' : sk.length ? 'hi' : undefined;   // v10: 禁じ手を覚えた札の力士は禁じ手を、秘術なら念力を使う
+    return {name:nmStr(c.nm), style, tier:2, rk:c.hi, size:c.A.koshi >= 4 ? 2 : c.A.kan >= 4 && c.A.koshi <= 2 ? 0 : 1, ab:{...c.A}, color:BODY[1], skin:SKIN[0], bias, sp};
+  }
+  function startChallenge(c){
+    if (busy) return;
+    $('bookm').classList.remove('show'); $('modal').classList.remove('show'); $('app').classList.remove('atgate');
+    const base = CHAL ? CHAL.S0 : S, fresh = !base.nm;
+    if (!CHAL) CHAL = {c, S0:S, B0:B}; else CHAL.c = c;
+    const T = JSON.parse(JSON.stringify(base));
+    if (fresh){ T.A = {atari:3, yotsu:3, koshi:3, kan:3}; T.nm = [0, 0]; T.kuse = null; }   // 自分の力士がまだいない人は、能力 3 の力士で取る
+    Object.assign(T, {basho:Math.max(1, T.basho), day:0, res:[], km:[], stam:T.max, injured:null, phase:'bout', J:null});
+    const o = oppFromCard(c); T.opps = Array.from({length:15}, () => o);
+    S = T; view = {c:0, g:0, preview:null}; B = newBout(S, rnd); preOpp(o); nextExchange();
+  }
+  function chalEnd(win){
+    const c = CHAL.c;
+    $('sheet').innerHTML = `<div class="sh-h"><span class="k">名鑑の一番</span></div>
+      <h2>${win ? '勝ち' : '負け'}</h2>
+      <div class="jl">${nmStr(CHAL.S0.nm)} 対 <b>${nmStr(c.nm)}</b>（ランク${KAKU[kakuOf(c.sc)].t}）</div>
+      <div class="krow"><button class="share" id="cagain">もう一番</button></div>
+      <button class="go" id="cback">自分の場所へ</button>`;
+    $('cagain').onclick = () => startChallenge(c);
+    $('cback').onclick = endChallenge;
+    $('modal').classList.add('show');
+  }
+  function endChallenge(){
+    S = CHAL.S0; B = CHAL.B0; CHAL = null;
+    clearHash(); $('modal').classList.remove('show');
+    if (!S.nm || ENTRY.open) return openGate();       // v9: 入口から来たなら入口へ戻る
+    resume();
+  }
+  // =====================================================================
+  // v9: 入口（今日の場所／生涯の 2 つ・記録の 1 行）
+  // =====================================================================
+  const ENTRY = {open:false};
+  function untilMidnight(){
+    const t = new Date(), m = new Date(t.getFullYear(), t.getMonth(), t.getDate() + 1) - t;
+    return `${Math.floor(m / 36e5)}時間${Math.floor(m % 36e5 / 6e4)}分`;
+  }
+  function openGate(){
+    ENTRY.open = true; B = null; busy = false;
+    $('bookm').classList.remove('show');
+    const key = todayKey(), dl = dailyLoad(), car0 = loadGame(), st = streakNow();
+    const car = car0 && car0.phase !== 'retire' ? car0 : null;   // 引退した力士の保存は「続き」にしない（名鑑に残っている）
+    const stEm = st ? `<em>${st}日続けて</em>` : '';
+    const done = dl && dl.done;
+    const daily = done
+      ? `<div class="gate done"><span class="gk">今日の場所 ${mdOf(key)}${stEm}</span><b class="num">${done.w}勝${15 - done.w}敗</b><small>また明日・次の場所まで${untilMidnight()}</small><span class="glet">${DRANK[done.rk].t}</span></div>
+         <button class="share" id="gShare">今日の星を共有</button>`
+      : `<button class="gate main" id="gD"><span class="gk">今日の場所 ${mdOf(key)}${stEm}</span><b>${dl && dl.S ? `続きから・${dl.S.day + 1}日目` : '今日の弟子と15番'}</b><small>1日1回・みんな同じ相手、同じ稽古</small></button>`;
+    $('sheet').innerHTML = `
+      <h1 class="gt-t">はっけよい！<br>読み合い相撲</h1>
+      <div class="gt-s">相手の次の手を見て技を選び、<br>土俵の外へ押し出す。</div>
+      ${daily}
+      <button class="gate" id="gL"><span class="gk">生涯</span><b>${car && car.nm ? `${nmStr(car.nm)}・${RANKS[car.rank]}` : '自分の力士を育てる'}</b><small>${car && car.nm ? `${car.life.bn + 1}場所目から続ける` : '幕下から12場所。良い力士を名鑑に残す'}</small></button>
+      ${REC.best || REC.hi >= 0 || bookCount() ? `<div class="grec">${recLine()}</div>` : ''}`;
+    $('app').classList.add('atgate');
+    const go = () => { ENTRY.open = false; $('app').classList.remove('atgate'); $('modal').classList.remove('show'); view = {c:0, g:0, preview:null}; setPose('stand', 'stand'); };
+    if ($('gD')) $('gD').onclick = () => {
+      go();
+      if (dl && dl.S){
+        S = dl.S;
+        if (S.dly.mid === S.day && S.res.length === S.day && S.phase === 'bout'){   // 途中で閉じた番は負け（取り直しなし）
+          endDay(S, false, null); S.dly.mid = -1; S.phase = phaseAfter(S); saveGame();
+          setTimeout(() => say('閉じた一番は負け'), 400);
+        }
+        resume();
+      } else {
+        S = newDaily(key);
+        if (!bookCount() && !car && !REC.dBest) S.basho = 0;   // まったく初めての人は、最初の 2 番を手引きの形で（指さし・組む技は 3 番目から）
+        saveGame(); renderHUD(); startDay();
+      }
+    };
+    if ($('gShare')) $('gShare').onclick = () => shareDaily(key, done.w, done.rk, done.res, '');
+    $('gL').onclick = () => {
+      go(); rnd = RND0;
+      if (car){ S = car; resume(); }
+      else { S = newSeason({}, rnd); renderHUD(); startDay(); }
+    };
+    $('sheet').scrollTop = 0;
+    $('modal').classList.add('show');
+  }
+  // 続きから（起動・名鑑の一番のあと）
+  function resume(){
+    view = {c:0, g:0, preview:null}; setPose('stand', 'stand');
+    renderHUD(); place(); drawStage();
+    if (S.phase === 'retire') return openRetire();
+    if (S.phase === 'end' || S.day >= 15){ S.day = 15; return endBasho(); }
+    if (S.phase === 'grow' && GROW_DAYS.includes(S.day)) return openGrow();
+    if (S.phase === 'moshi' && S.day === MOSHI_DAY) return openMoshi();
+    if (B && !B.over){ view.c = B.c; view.g = B.g; preOpp(curOpp()); renderHUD(); place(); renderHand(); renderIntent(); drawStage(); return; }
+    startDay();
   }
   const GAME_NAME = 'はっけよい！読み合い相撲';
   function anim(dur, fn){
@@ -2089,10 +3288,11 @@
   const DQ = [];
   const DSTEPS = [
     // 6日目（押し相手・互角）: 突っ込みを、かわして流す（業師は突き押しに強い＝+1）
-    {vis:['charge','brace'], m:'charge', k:2, hand:['push','dodge','thrust','grip'], pick:'dodge', look:250, prev:900},
-    {vis:['brace','grab'], m:'brace', hand:['push','thrust','brace','dodge'], pick:'thrust', look:100, prev:400},
-    // 7日目（格上・大きい四つの相手）: 稽古で覚えた「のどを押す」→ 当たり 3 で、踏ん張る相手を押し倒し
-    {vis:['charge','brace'], m:'charge', k:2, hand:['nodowa','brace','thrust','grip'], pick:'nodowa', look:1000, prev:1900},   // 前に出ろ で +1（短冊）
+    {vis:['charge','brace'], m:'charge', k:2, hand:['push','dodge','thrust','grip'], pick:'dodge', look:250, prev:750},
+    // v10: 2 手目は秘術「念力」（気を 1 使う・土俵が一瞬金と藍に変わる）→ 念動押し出し
+    {vis:['brace','grab'], m:'brace', hand:['push','nen','brace','dodge'], pick:'nen', look:100, prev:450},
+    // 7日目（格上・大きい四つの相手）: 禁じ手「髷つかみ」の影（反則 %）を一瞬見て、稽古で覚えた「のどを押す」→ 当たり 3 で、踏ん張る相手を押し倒し
+    {vis:['charge','brace'], m:'charge', k:2, hand:['nodowa','brace','mage','grip'], pick:'nodowa', peek:'mage', look:350, prev:800},   // 前に出ろ で +1（短冊）
     {vis:['brace','charge'], m:'brace', hand:['push','thrust','brace','dodge'], pick:'thrust', look:80, prev:300},
   ];
   const DREST = [1,1,0,1,1,1,0,1], DKIM = ['yorikiri','tsukidashi',null,'shitatenage','oshidashi','hikiotoshi',null,'yorikiri'];
@@ -2103,8 +3303,18 @@
   }
   async function demo(){
     document.documentElement.style.setProperty('--mv', '.22s');
-    S = newSeason({basho:1, A:{atari:2, yotsu:2, koshi:2, kan:1}, kuse:null}, rnd);
+    // v9: 入口（今日の場所・2 日続けて）→ 今日の場所の 6・7 日目 → 今日のランクの数え上げ（自己ベスト・化粧廻し「雲」）
+    REC.ke = ['nami']; REC.wear = 'nami'; REC.st = {last:prevKey(todayKey()), n:2}; REC.dBest = {pts:560, key:'2026-11-25'};
+    openGate();
+    await sleep(500);
+    { const g = $('gD'), r = g.getBoundingClientRect(); tapAt(r.left + r.width / 2, r.top + r.height / 2); g.classList.add('pressed'); await sleep(110); }
+    ENTRY.open = false; $('app').classList.remove('atgate'); $('modal').classList.remove('show');
+    S = newDaily(todayKey());
+    Object.assign(S, {A:{atari:2, yotsu:2, koshi:2, kan:1}, deck:START_DECK.concat(['nen','mage']), oshie:[], kiMax:3, ki:3});
     S.res = [1,1,0,1,1]; S.km = ['oshidashi','yorikiri',null,'tsukidashi','hikiotoshi']; S.day = 5; S.stam = 10;
+    // 前の 2 場所の勝ち方（格の点の元）: 千秋楽の紙で格が「並→良」に上がる瞬間を見せる
+    S.car = {kc:{oshidashi:6, yorikiri:5, tsukidashi:4, hikiotoshi:2, uwatenage:2, hatakikomi:1}, rev:1};
+    S.kata = [{a:'push', b:'thrust', w:3, bw:1, used:0, st:0}]; S.flow = {'push>thrust':3};
     S.opps[5] = {...S.opps[5], style:'oshi', tier:1, size:0, ab:{atari:3, yotsu:2, koshi:2, kan:3}};
     S.opps[6] = {...S.opps[6], style:'yotsu', tier:2, size:2, ab:{atari:3, yotsu:4, koshi:3, kan:3}};
     DQ.push(...DSTEPS);
@@ -2114,11 +3324,15 @@
       if (i === 2){                                   // 稽古の紙: 教えとコツの印の付いた鉄砲 → 親方「前に出ろ」・当たり 3 → 「のどを押す」を覚える
         await until(() => document.querySelector('.gopts [data-k="teppo"]'));
         await sleep(900); await press(document.querySelector('[data-k="teppo"]'));
-        await sleep(1400); await until(() => document.querySelector('[data-l="nodowa"]')); await press(document.querySelector('[data-l="nodowa"]'));
+        await sleep(1100); await until(() => document.querySelector('[data-l="nodowa"]')); await press(document.querySelector('[data-l="nodowa"]'));
         await sleep(600); await press($('gdone'));
       }
       await until(() => !busy && B && !B.over && DQ[0] === s && S.phase === 'bout');
       await sleep(s.look);
+      if (s.peek){                                    // v10: 禁じ手の影（「反則 %」）を見てから、やめて本物の技にする
+        const pb = document.querySelector(`.card[data-c="${s.peek}"]`); showPreview(s.peek); pb.classList.add('sel');
+        await sleep(900); pb.classList.remove('sel');
+      }
       showPreview(s.pick);
       const btn = document.querySelector(`.card[data-c="${s.pick}"]`); btn.classList.add('sel');
       await sleep(s.prev);
@@ -2150,29 +3364,70 @@
 
   // ---------- 起動: 保存があれば続きの日から ----------
   // 撮影で v7 の紙を見るときだけ一時的に 'book'（帳の教えと型）か 'end'（千秋楽）にする（file: の最初の画面）
+  // v8 の紙を見るときは 'end'（千秋楽）・'retire'（引退）・'meikan'（名鑑）・'card'（札）・'url'（届いた札）・'bad'（読めない札）・'name'（四股名）・'grow'（稽古）
+  // v9: 'gate'（入口）・'gatedone'（今日の場所を取り終えた入口）・'daily'（今日の場所の紙）。名鑑と札は化粧廻しつき
   const PEEK = null;
+  let PEEK_SP = null;                                 // 撮影で稽古の晩の 1 本を出すときだけ
   function peek(){
-    S = newSeason({basho:3, rank:3, A:{atari:3, yotsu:4, koshi:2, kan:2}, kuse:'hiki'}, rnd);
+    REC = recFix({best:{sc:712, nm:[0, 2], hi:6}, hi:6, yk:0, ke:['nami','matsu','uroko'], wear:'matsu', st:{last:prevKey(todayKey()), n:2}, dBest:{pts:560, key:'x'}});
+    if (PEEK === 'gate' || PEEK === 'gatedone'){
+      setPose('stand', 'stand'); renderHUD(); place(); drawStage();
+      if (PEEK === 'gatedone') dailyLoad = () => ({key:todayKey(), done:{w:11, pts:642, rk:4, res:'○○●○○○●○○○●○○●○'}});
+      return openGate();
+    }
+    if (PEEK === 'daily'){
+      S = newDaily(todayKey()); S.res = [1,1,0,1,1,1,0,1,1,1,1,0,1,1,0];
+      S.km = S.res.map((x, i) => x ? ['oshidashi','yorikiri','hikiotoshi','oshitaoshi','uwatenage','tsukidashi'][i % 6] : null);
+      S.day = 15; setPose('stand', 'stand'); renderHUD(); place(); drawStage(); return endBasho();
+    }
+    S = newSeason({basho:3, rank:5, A:{atari:4, yotsu:5, koshi:3, kan:3}, kuse:'hiki', nm:[2, 3],
+      deck:START_DECK.concat(['shitate','gabu','kake','nodowa']),
+      life:{bn:7, hist:[[0,10],[1,9],[2,11],[3,10],[4,11],[5,12],[5,11]], hi:5, yu:0, sa:3, mk:0, kado:0, drop:-1, yuRun:0, sc:470}}, rnd);
     S.oshie = ['mae','waki']; S.kseen = 7; S.imeis = ['nage','nebari']; S.imei = 'nage';
     S.kata = [{a:'grip', b:'throw', w:7, bw:3, used:0, st:1}, {a:'push', b:'thrust', w:3, bw:1, used:1, st:0}];
     S.flow = {'grip>throw':7, 'push>thrust':3, 'dodge>thrust':2, 'brace>push':1};
+    S.car = {kc:{uwatenage:14, yorikiri:12, oshidashi:9, tsukidashi:6, shitatenage:4, hikiotoshi:3, sotogake:1, sukuinage:2, katasukashi:1, tsukiotoshi:2, uchigake:1, kotenage:1}, rev:3};
     S.log7 = [{k:'study', a:'grip', b:'throw'}];
-    if (PEEK === 'end'){
-      S.res = [1,1,0,1,1,1,0,1,1,1,1,0,1,1,0]; S.km = S.res.map((x, i) => x ? ['uwatenage','yorikiri','oshidashi','uwatenage','tsukidashi'][i % 5] : null);
-      S.day = 15; setPose('stand', 'stand'); renderHUD(); place(); drawStage(); endBasho(); return;
+    const mk = (nm, sc, hi, w, bn, A, why, yu) => ({nm, sc, hi, w, l:bn * 15 - w, bn, A, dk:['shitate','gabu'], kata:[['grip','throw']], imei:'nage', kimN:15, yu:yu || 0, sa:2, os:['mae'], top:'uwatenage', why, ke:yu ? 'matsu' : sc > 400 ? 'nami' : null});
+    peekCards = [mk([0, 2], 712, 6, 118, 12, {atari:5, yotsu:5, koshi:4, kan:4}, 'full', 1), mk([4, 6], 488, 4, 81, 9, {atari:4, yotsu:3, koshi:3, kan:5}, 'mk'), mk([10, 7], 301, 2, 52, 5, {atari:3, yotsu:3, koshi:2, kan:2}, 'hurt')]
+      .map((c, i) => ({id:'p' + i, c:encCard(c)}));
+    setPose('stand', 'stand');
+    if (PEEK === 'end' || PEEK === 'retire'){
+      S.res = [1,1,0,1,1,1,0,1,1,1,1,0,1,1,1]; S.km = S.res.map((x, i) => x ? ['uwatenage','yorikiri','oshidashi','uwatenage','tsukidashi','sotogake'][i % 6] : null);
+      S.line = 12; S.day = 15; renderHUD(); place(); drawStage(); endBasho();
+      if (PEEK === 'retire'){ S.J.retire = 'full'; openRetire(); }
+      return;
     }
-    startDay(); openBook(1);
+    // v10: 'kin'（禁じ手の影と反則 %）・'mono'（物言い）・'ura' / 'yama'（稽古の晩の 1 本）・'book4'（帳の 4 枚目）
+    if (PEEK === 'kin' || PEEK === 'mono'){
+      Object.assign(S, {rank:3, day:4, res:[1,1,0,1], km:['oshidashi','yorikiri',null,'tsukidashi'], kiMax:3, ki:2, hin:62, kuse:null});
+      S.deck = START_DECK.concat(['mage','lariat','nen','senri']); S.opps[4] = {...S.opps[4], sp:'kin', tier:2};
+      renderHUD(); place(); drawStage(); startDay();
+      Object.assign(B, {hand:['lariat','nen','mage','push'], m:'charge', vis:['charge','brace'], k:4, ofoul:true});
+      sel = PEEK === 'kin' ? 'lariat' : null; renderHUD(); place(); renderHand(); renderIntent();
+      if (PEEK === 'kin') showPreview('lariat');
+      else { view.c = 2; place(); drawStage(); B.over = 'foul'; renderIntent(); renderHand(); monoii(); }
+      return;
+    }
+    if (PEEK === 'ura' || PEEK === 'yama'){ PEEK_SP = PEEK; S.day = 6; S.res = [1,1,0,1,1,0]; S.km = ['oshidashi','yorikiri',null,'tsukidashi','uwatenage',null]; S.hin = 71; renderHUD(); place(); drawStage(); openGrow(); return; }
+    if (PEEK === 'book4'){ book = {magenage:2, lariat:1, nendo:3, senrigaeshi:1, oshidashi:4}; S.hin = 52; S.kiMax = 4; S.ki = 3; S.car.fl = 2; startDay(); openBook(3); return; }
+    if (PEEK === 'name'){ S.nm = null; renderHUD(); place(); drawStage(); startDay(); return; }
+    if (PEEK === 'grow'){ S.day = 3; S.res = [1,1,0]; S.km = ['oshidashi','yorikiri',null]; S.injured = 'thrust'; S.hurtN = 1; renderHUD(); place(); drawStage(); openGrow(); return; }
+    startDay();
+    if (PEEK === 'meikan') openBook(2);
+    else if (PEEK === 'card') openCard(decCard(peekCards[0].c), 'own');
+    else if (PEEK === 'url') openCard(decCard(peekCards[1].c), 'url');
+    else if (PEEK === 'bad') openCard(decCard('1.2.x'), 'url');
+    else if (PEEK === 'chal') startChallenge(decCard(peekCards[0].c));
+    else if (PEEK === 'chalend'){ startChallenge(decCard(peekCards[0].c)); chalEnd(true); }
+    else openBook(1);
   }
   function boot(){
     if (PEEK) return peek();
-    const s = loadGame();
-    if (!s){ startDay(); return; }
-    S = s; B = null;
     setPose('stand', 'stand'); renderHUD(); place(); drawStage();
-    if (S.phase === 'end' || S.day >= 15){ S.day = 15; endBasho(); return; }
-    if (S.phase === 'grow' && GROW_DAYS.includes(S.day)){ openGrow(); return; }
-    if (S.phase === 'moshi' && S.day === MOSHI_DAY){ openMoshi(); return; }
-    startDay();
+    openGate();                                     // v9: 最初の画面は入口（今日の場所／生涯）
+    // 共有で届いた札（#r=…）: 札を出して「この力士と取る」
+    if (location.hash.startsWith('#r=')) openCard(decCard(decodeURIComponent(location.hash.slice(3))), 'url');
   }
 
   document.title = GAME_NAME;
